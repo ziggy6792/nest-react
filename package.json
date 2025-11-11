@@ -3,8 +3,9 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "build:contract": "pnpm --filter @repo/contract build",
     "clean": "turbo run clean",
-    "dev": "turbo run dev",
+    "dev": "pnpm run build:contract && turbo run dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo run lint",
     "test": "turbo run test",
@@ -17,5 +18,12 @@
   "packageManager": "pnpm@8.15.6",
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.90.7",
+    "@ts-rest/core": "^3.52.1",
+    "@ts-rest/nest": "^3.52.1",
+    "@ts-rest/react-query": "^3.52.1",
+    "zod": "^3.22.3"
   }
 }

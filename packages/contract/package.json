@@ -1,0 +1,18 @@
+{
+  "name": "@repo/contract",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@ts-rest/core": "^3.52.1",
+    "zod": "^3.22.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}
+
