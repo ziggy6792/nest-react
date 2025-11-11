@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "prettier": "^3.6.0",
+    "tsc-alias": "^1.8.16",
     "turbo": "^2.6.1"
   },
   "packageManager": "pnpm@8.15.6",
