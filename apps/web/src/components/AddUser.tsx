@@ -1,15 +1,14 @@
-import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { tsr } from "../api/tsr";
+import { useState } from 'react';
+import { users } from '../api';
 
 export function AddUser() {
-  const [name, setName] = useState("");
-  const queryClient = useQueryClient();
+  const [name, setName] = useState('');
 
-  const add = tsr.add.useMutation({
+  // Use hooks directly - full type safety preserved
+  const add = users.hooks.add.useMutation({
     onSuccess: () => {
-      // Invalidate the list query to refetch
-      queryClient.invalidateQueries({ queryKey: ['users'] });
+      // tRPC-like utils: typed invalidation with extracted types
+      users.utils.list.invalidate();
     },
   });
 
@@ -18,18 +17,12 @@ export function AddUser() {
       onSubmit={(e) => {
         e.preventDefault();
         add.mutate({ body: { name } });
-        setName("");
-      }}
-    >
-      <input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Name"
-      />
-      <button type="submit" disabled={add.isPending}>
+        setName('');
+      }}>
+      <input value={name} onChange={(e) => setName(e.target.value)} placeholder='Name' />
+      <button type='submit' disabled={add.isPending}>
         Add
       </button>
     </form>
   );
 }
-

@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./app";
 import "./index.css";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 const el = document.getElementById("root");
 if (el) {
