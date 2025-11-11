@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { initContract } from "@ts-rest/core";
+import { z } from 'zod';
+import { initContract } from '@ts-rest/core';
 
 const c = initContract();
 
@@ -15,23 +15,22 @@ export const CreateUser = z.object({
 export const users = c.router(
   {
     list: {
-      method: "GET",
-      path: "/users",
+      method: 'GET',
+      path: '/users',
       responses: { 200: z.array(User) },
     },
     byId: {
-      method: "GET",
-      path: "/users/:id",
+      method: 'GET',
+      path: '/users/:id',
       pathParams: z.object({ id: z.string() }),
       responses: { 200: User },
     },
     add: {
-      method: "POST",
-      path: "/users",
+      method: 'POST',
+      path: '/users',
       body: CreateUser,
       responses: { 201: User },
     },
   },
-  { pathPrefix: "/api" }
+  { pathPrefix: '/api' }
 );
-

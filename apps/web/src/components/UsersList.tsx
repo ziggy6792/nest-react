@@ -1,4 +1,4 @@
-import { tsr } from "../api/tsr";
+import { tsr } from '../api/tsr';
 
 export function UsersList() {
   const q = tsr.list.useQuery(['users'], undefined);
@@ -14,4 +14,3 @@ export function UsersList() {
     </ul>
   );
 }
-
