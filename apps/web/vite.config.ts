@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@contract": path.resolve(__dirname, "../../packages/contract/src"),
+      "@contract": path.resolve(__dirname, "../api/src/contracts"),
     },
   },
 });

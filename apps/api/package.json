@@ -20,8 +20,11 @@
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
+    "@ts-rest/core": "^3.52.1",
+    "@ts-rest/nest": "^3.52.1",
     "reflect-metadata": "^0.2.0",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "zod": "^3.22.3"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",

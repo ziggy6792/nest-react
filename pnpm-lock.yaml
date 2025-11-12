@@ -13,7 +13,7 @@ importers:
         version: 5.90.7(react@18.3.1)
       '@ts-rest/core':
         specifier: ^3.52.1
-        version: 3.52.1(zod@3.25.76)
+        version: 3.52.1(@types/node@22.15.3)(zod@3.25.76)
       '@ts-rest/nest':
         specifier: ^3.52.1
         version: 3.52.1(@nestjs/common@11.1.8)(@nestjs/core@11.1.8)(@ts-rest/core@3.52.1)(rxjs@7.8.2)(zod@3.25.76)
@@ -48,12 +48,21 @@ importers:
       '@nestjs/platform-express':
         specifier: ^11.0.0
         version: 11.1.8(@nestjs/common@11.1.8)(@nestjs/core@11.1.8)
+      '@ts-rest/core':
+        specifier: ^3.52.1
+        version: 3.52.1(@types/node@22.15.3)(zod@3.25.76)
+      '@ts-rest/nest':
+        specifier: ^3.52.1
+        version: 3.52.1(@nestjs/common@11.1.8)(@nestjs/core@11.1.8)(@ts-rest/core@3.52.1)(rxjs@7.8.2)(zod@3.25.76)
       reflect-metadata:
         specifier: ^0.2.0
         version: 0.2.2
       rxjs:
         specifier: ^7.8.1
         version: 7.8.2
+      zod:
+        specifier: ^3.22.3
+        version: 3.25.76
     devDependencies:
       '@jest/globals':
         specifier: ^29.7.0
@@ -181,19 +190,6 @@ importers:
         version: 8.46.2(eslint@9.39.0)(typescript@5.9.3)
 
   packages/config-typescript: {}
-
-  packages/contract:
-    dependencies:
-      '@ts-rest/core':
-        specifier: ^3.52.1
-        version: 3.52.1(zod@3.25.76)
-      zod:
-        specifier: ^3.22.3
-        version: 3.25.76
-    devDependencies:
-      typescript:
-        specifier: ^5.5.4
-        version: 5.9.3
 
   packages/jest-presets:
     dependencies:
@@ -1967,7 +1963,7 @@ packages:
     engines: {node: '>= 10'}
     dev: true
 
-  /@ts-rest/core@3.52.1(zod@3.25.76):
+  /@ts-rest/core@3.52.1(@types/node@22.15.3)(zod@3.25.76):
     resolution: {integrity: sha512-tAjz7Kxq/grJodcTA1Anop4AVRDlD40fkksEV5Mmal88VoZeRKAG8oMHsDwdwPZz+B/zgnz0q2sF+cm5M7Bc7g==}
     peerDependencies:
       '@types/node': ^18.18.7 || >=20.8.4
@@ -1978,6 +1974,7 @@ packages:
       zod:
         optional: true
     dependencies:
+      '@types/node': 22.15.3
       zod: 3.25.76
     dev: false
 
@@ -1995,7 +1992,7 @@ packages:
     dependencies:
       '@nestjs/common': 11.1.8(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nestjs/core': 11.1.8(@nestjs/common@11.1.8)(@nestjs/platform-express@11.1.8)(reflect-metadata@0.2.2)(rxjs@7.8.2)
-      '@ts-rest/core': 3.52.1(zod@3.25.76)
+      '@ts-rest/core': 3.52.1(@types/node@22.15.3)(zod@3.25.76)
       rxjs: 7.8.2
       zod: 3.25.76
     dev: false
@@ -2012,7 +2009,7 @@ packages:
         optional: true
     dependencies:
       '@tanstack/react-query': 5.90.7(react@18.3.1)
-      '@ts-rest/core': 3.52.1(zod@3.25.76)
+      '@ts-rest/core': 3.52.1(@types/node@22.15.3)(zod@3.25.76)
       react: 18.3.1
       zod: 3.25.76
     dev: false

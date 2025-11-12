@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '@contract/users.contract';
+import { User } from '../contracts/users.contract';
 import type { z } from 'zod';
 
 type UserType = z.infer<typeof User>;

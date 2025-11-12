@@ -4,10 +4,6 @@
     "baseUrl": "./",
     "outDir": "./dist",
     "noEmit": false,
-    "allowImportingTsExtensions": false,
-    "paths": {
-      "@contract/*": ["../../packages/contract/src/*"]
-    }
-  },
-  "references": [{ "path": "../../packages/contract" }]
+    "allowImportingTsExtensions": false
+  }
 }

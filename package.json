@@ -3,9 +3,8 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "build:contract": "pnpm --filter @repo/contract build",
     "clean": "turbo run clean",
-    "dev": "pnpm run build:contract && turbo run dev",
+    "dev": "turbo run dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo run lint",
     "test": "turbo run test",

@@ -5,10 +5,7 @@
     "outDir": "./dist",
     "noEmit": false,
     "allowImportingTsExtensions": false,
-    "composite": false,
-    "paths": {
-      "@contract/*": ["../../packages/contract/dist/src/*"]
-    }
+    "composite": false
   },
   "include": ["src"],
   "exclude": ["node_modules", "test", "dist", "**/*spec.ts", ".prettierrc.mjs", "eslint.config.mjs", "jest.config.mjs", "jest.config.ts"]

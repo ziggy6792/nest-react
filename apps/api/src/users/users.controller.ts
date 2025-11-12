@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
-import { users } from '@contract/users.contract';
+import { users } from '../contracts/users.contract';
 import { UsersService } from './users.service';
 
 @Controller()

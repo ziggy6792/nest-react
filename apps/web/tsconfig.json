@@ -16,7 +16,7 @@
     "baseUrl": ".",
     "types": ["vite/client"],
     "paths": {
-      "@contract/*": ["../../packages/contract/src/*"]
+      "@contract/*": ["../api/src/contracts/*"]
     },
 
     /* Linting */
@@ -26,5 +26,5 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }, { "path": "../../packages/contract" }]
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
