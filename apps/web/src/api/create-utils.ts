@@ -37,6 +37,94 @@ export function withKey<TArgs, TResult>(
 }
 
 /**
+ * Type utility that wraps hooks structure to automatically inject query keys.
+ * Transforms useQuery(queryKey, args) into useQuery(args).
+ *
+ * For ts-rest hooks, useQuery has the signature:
+ * <TData = DefaultData>(queryKey: QueryKey, args: TArgs, options?: Options) => UseQueryResult<TData>
+ *
+ * We transform it to:
+ * <TData = DefaultData>(args: TArgs, options?: Options) => UseQueryResult<TData>
+ */
+export type WrappedHooksForRouter<TRouter extends AppRouter, THooks extends Record<string, any>, TUtils extends Record<string, any>> = {
+  [K in keyof TRouter]: K extends string
+    ? TRouter[K] extends { method: 'GET' | 'HEAD' }
+      ? THooks[K] extends Record<string, any>
+        ? Omit<THooks[K], 'useQuery'> & {
+            useQuery: THooks[K] extends { useQuery: infer TUseQuery }
+              ? TUseQuery extends <TData = any>(queryKey: any, args: infer TArgs, options?: infer TOptions) => infer TReturn
+                ? <TData = any>(args: TArgs, options?: TOptions) => TReturn
+                : TUseQuery
+              : never;
+          }
+        : THooks[K]
+      : TRouter[K] extends AppRouter
+        ? WrappedHooksForRouter<TRouter[K], THooks[K] extends Record<string, any> ? THooks[K] : {}, TUtils[K] extends Record<string, any> ? TUtils[K] : {}>
+        : THooks[K]
+    : never;
+};
+
+/**
+ * Wraps hooks with automatic query key injection.
+ * Transforms hooks so useQuery(args) automatically includes the query key.
+ *
+ * @param router - The ts-rest router contract
+ * @param hooks - The original hooks from initQueryClient
+ * @param utils - The utils object containing query key functions
+ * @returns Wrapped hooks with automatic query key injection
+ *
+ * @example
+ * const wrappedHooks = wrapHooks(usersContract, usersHooks, utils);
+ * // Now you can use: wrappedHooks.byId.useQuery(args) instead of useQuery(queryKey, args)
+ */
+export function wrapHooks<TRouter extends AppRouter, THooks extends Record<string, any>, TUtils extends Record<string, any>>(
+  router: TRouter,
+  hooks: THooks,
+  utils: TUtils
+): WrappedHooksForRouter<TRouter, THooks, TUtils> {
+  const wrapped: any = {};
+
+  for (const key of Object.keys(router)) {
+    const routerNode = router[key];
+    const hooksNode = hooks[key];
+    const utilsNode = utils[key];
+
+    if (isRoute(routerNode)) {
+      const method = routerNode.method as string;
+      const isQuery = isQueryMethod(method);
+
+      if (isQuery && hooksNode && typeof hooksNode === 'object' && 'useQuery' in hooksNode) {
+        // Wrap the useQuery hook to automatically inject query key
+        const originalUseQuery = hooksNode.useQuery;
+        const queryKeyFn = utilsNode?.queryKey;
+
+        // Create wrapper function that matches the original signature minus the queryKey param
+        function wrappedUseQuery(this: any, ...argsAndOptions: any[]) {
+          const [args, options] = argsAndOptions;
+          const queryKey = queryKeyFn ? queryKeyFn(args) : [key, args];
+          return originalUseQuery.call(this, queryKey, args, options);
+        }
+
+        wrapped[key] = {
+          ...hooksNode,
+          useQuery: wrappedUseQuery,
+        };
+      } else {
+        // For non-query routes (mutations), keep as-is
+        wrapped[key] = hooksNode;
+      }
+    } else if (routerNode && typeof routerNode === 'object' && !isRoute(routerNode)) {
+      // Nested router - recurse
+      wrapped[key] = wrapHooks(routerNode as AppRouter, hooksNode || {}, utilsNode || {});
+    } else {
+      wrapped[key] = hooksNode;
+    }
+  }
+
+  return wrapped;
+}
+
+/**
  * Type utility that maps router structure to typed utils structure.
  * For GET/HEAD routes: adds queryKey, invalidate, prefetch, setData
  * For mutations: adds fetch
