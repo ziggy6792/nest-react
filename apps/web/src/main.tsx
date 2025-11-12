@@ -1,12 +1,11 @@
-import React from "react";
-import { createRoot } from "react-dom/client";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import App from "./app";
-import "./index.css";
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './query-client';
+import App from './app';
+import './index.css';
 
-export const queryClient = new QueryClient();
-
-const el = document.getElementById("root");
+const el = document.getElementById('root');
 if (el) {
   const root = createRoot(el);
   root.render(
@@ -17,5 +16,5 @@ if (el) {
     </React.StrictMode>
   );
 } else {
-  throw new Error("Could not find root element");
+  throw new Error('Could not find root element');
 }

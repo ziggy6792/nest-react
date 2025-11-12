@@ -1,7 +1,7 @@
 import { usersHooks, usersClient } from './tsr';
 import { users as usersContract } from '@contract/users.contract';
 import { createUtils, withKey } from './create-utils';
-import { queryClient } from '../main';
+import { queryClient } from '../query-client';
 
 /**
  * Users API with hooks and auto-generated utils.
