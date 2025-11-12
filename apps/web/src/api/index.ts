@@ -1,6 +1,6 @@
 import { usersHooks, usersClient } from './tsr';
 import { users as usersContract } from '@contract/users.contract';
-import { createUtils } from './create-utils';
+import { createUtils, withKey } from './create-utils';
 import { queryClient } from '../main';
 
 /**
@@ -12,3 +12,6 @@ export const users = {
   hooks: usersHooks,
   utils: createUtils(usersContract, usersHooks, usersClient, queryClient, 'users'),
 };
+
+// Re-export utility functions
+export { withKey };

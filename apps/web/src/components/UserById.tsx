@@ -1,10 +1,9 @@
-import { users } from '../api';
+import { users, withKey } from '../api';
 
 export function UserById({ id }: { id: string }) {
-  // Use hooks directly - full type safety preserved
-  // Query key is auto-generated from router structure
+  // Use withKey wrapper - full type safety preserved with cleaner syntax
   const args = { params: { id } };
-  const q = users.hooks.byId.useQuery(users.utils.byId.queryKey(args), args);
+  const q = withKey(users.utils.byId.queryKey, users.hooks.byId.useQuery)(args);
 
   if (q.isLoading) return <div>Loading...</div>;
   if (q.isError) return <div>Error</div>;

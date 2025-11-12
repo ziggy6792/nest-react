@@ -12,6 +12,31 @@ type ExtractQueryArg<THook> = THook extends {
   : never;
 
 /**
+ * Type-safe wrapper that combines a query key function with a useQuery hook.
+ * Eliminates the need to pass queryKey and args separately.
+ *
+ * @param queryKeyFn - Function that generates the query key from args
+ * @param hook - The useQuery hook to wrap
+ * @returns A new function that only requires args, automatically passing the query key
+ *
+ * @example
+ * // Before:
+ * const q = users.hooks.byId.useQuery(users.utils.byId.queryKey(args), args);
+ *
+ * // After:
+ * const q = withKey(users.utils.byId.queryKey, users.hooks.byId.useQuery)(args);
+ */
+export function withKey<TArgs, TResult>(
+  queryKeyFn: (args?: TArgs) => readonly unknown[],
+  hook: (queryKey: readonly unknown[], args: TArgs, options?: any) => TResult
+): (args: TArgs, options?: any) => TResult {
+  return (args, options) => {
+    const queryKey = queryKeyFn(args);
+    return hook(queryKey, args, options);
+  };
+}
+
+/**
  * Type utility that maps router structure to typed utils structure.
  * For GET/HEAD routes: adds queryKey, invalidate, prefetch, setData
  * For mutations: adds fetch
