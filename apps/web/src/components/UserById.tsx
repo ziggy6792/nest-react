@@ -8,5 +8,5 @@ export function UserById({ id }: { id: string }) {
   if (q.isLoading) return <div>Loading...</div>;
   if (q.isError) return <div>Error</div>;
 
-  return <div>{q.data?.body.bla}</div>;
+  return <div>{q.data?.body.name}</div>;
 }
