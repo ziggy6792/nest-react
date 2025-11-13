@@ -78,6 +78,9 @@ importers:
       drizzle-orm:
         specifier: ^0.41.0
         version: 0.41.0(@libsql/client@0.14.0)
+      drizzle-zod:
+        specifier: ^0.8.3
+        version: 0.8.3(drizzle-orm@0.41.0)(zod@3.25.76)
       reflect-metadata:
         specifier: ^0.2.0
         version: 0.2.2
@@ -4955,6 +4958,16 @@ packages:
         optional: true
     dependencies:
       '@libsql/client': 0.14.0
+    dev: false
+
+  /drizzle-zod@0.8.3(drizzle-orm@0.41.0)(zod@3.25.76):
+    resolution: {integrity: sha512-66yVOuvGhKJnTdiqj1/Xaaz9/qzOdRJADpDa68enqS6g3t0kpNkwNYjUuaeXgZfO/UWuIM9HIhSlJ6C5ZraMww==}
+    peerDependencies:
+      drizzle-orm: '>=0.36.0'
+      zod: ^3.25.0 || ^4.0.0
+    dependencies:
+      drizzle-orm: 0.41.0(@libsql/client@0.14.0)
+      zod: 3.25.76
     dev: false
 
   /dunder-proto@1.0.1:
