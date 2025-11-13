@@ -22,6 +22,7 @@ export const usersContract = {
         type({
           params: type({
             id: "string",
+            type: "'foo' | 'bar'",
           }),
         }),
       )

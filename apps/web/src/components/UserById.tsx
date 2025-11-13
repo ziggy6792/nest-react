@@ -5,7 +5,7 @@ export function UserById({ id }: { id: string }) {
   const { data, isLoading, isError } = useQuery(
     users.byId.queryOptions({
       input: {
-        params: { id },
+        params: { id, type: 'foo' },
       },
     })
   );
