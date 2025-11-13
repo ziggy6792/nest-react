@@ -1,9 +1,9 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
-import { eq, InferInsertModel } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { users } from '../server/db/schema';
 import type { Database } from '../server/db';
 
-type NewUser = InferInsertModel<typeof users>;
+type NewUser = typeof users.$inferInsert;
 
 @Injectable()
 export class UsersService {
@@ -23,8 +23,8 @@ export class UsersService {
     if (result.length === 0) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
-    
-    return result[0]!;
+        
+    return {...result[0], foo: 'bar'} as typeof users.$inferSelect; // example of a property that is stripped by the contract
   }
 
   async create(createUser: NewUser) {
@@ -34,7 +34,7 @@ export class UsersService {
       .values(createUser)
       .returning();
     
-    return result[0]!;
+    return result[0];
   }
 }
 

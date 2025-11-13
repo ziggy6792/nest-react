@@ -27,6 +27,7 @@ export const contract = {
         }),
       )
       .output(userSelectSchema),
+      // .output(userSelectSchema.onDeepUndeclaredKey('delete')), example
     add: oc
       .route({
         method: 'POST',
