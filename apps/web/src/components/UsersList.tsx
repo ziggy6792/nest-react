@@ -13,7 +13,7 @@ export function UsersList() {
 
   return (
     <ul>
-      {data?.map((u: { id: number; name: string }) => (
+      {data?.map((u) => (
         <li key={u.id}>{u.name}</li>
       ))}
     </ul>
