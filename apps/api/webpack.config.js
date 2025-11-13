@@ -1,29 +1,49 @@
-const swcDefaultConfig = require('@nestjs/cli/lib/compiler/defaults/swc-defaults').swcDefaultsFactory().swcOptions;
+const swcDefaultConfig =
+  require("@nestjs/cli/lib/compiler/defaults/swc-defaults").swcDefaultsFactory()
+    .swcOptions;
 
 module.exports = function (options, webpack) {
   return {
     ...options,
+    watchOptions: {
+      aggregateTimeout: 500, // Wait 500ms after the last change before rebuilding
+    },
     externalsPresets: {
       node: true, // Externalize Node.js built-ins
     },
     externals: [
       // Externalize all node_modules, but bundle @orpc packages and their ESM dependencies
       function ({ request, context }, callback) {
-        if (request && !request.startsWith('.') && !request.startsWith('/')) {
+        if (request && !request.startsWith(".") && !request.startsWith("/")) {
           // Bundle @orpc packages (ESM-only)
-          if (request.startsWith('@orpc/')) {
+          if (request.startsWith("@orpc/")) {
             return callback();
           }
           // Bundle arktype and drizzle-arktype (ESM-only)
-          if (request === 'arktype' || request === 'drizzle-arktype' || request.startsWith('@ark/') || request.startsWith('ark')) {
+          if (
+            request === "arktype" ||
+            request === "drizzle-arktype" ||
+            request.startsWith("@ark/") ||
+            request.startsWith("ark")
+          ) {
             return callback();
           }
           // Bundle dependencies imported from @orpc packages (like rou3)
-          if (context && typeof context === 'string' && context.includes('@orpc')) {
+          if (
+            context &&
+            typeof context === "string" &&
+            context.includes("@orpc")
+          ) {
             return callback();
           }
           // Bundle dependencies imported from arktype-related packages
-          if (context && typeof context === 'string' && (context.includes('arktype') || context.includes('@ark') || context.includes('arkregex'))) {
+          if (
+            context &&
+            typeof context === "string" &&
+            (context.includes("arktype") ||
+              context.includes("@ark") ||
+              context.includes("arkregex"))
+          ) {
             return callback();
           }
           // Externalize everything else
@@ -39,14 +59,14 @@ module.exports = function (options, webpack) {
           test: /\.ts$/,
           exclude: /node_modules/,
           use: {
-            loader: 'swc-loader',
+            loader: "swc-loader",
             options: swcDefaultConfig,
           },
         },
         {
           test: /\.mjs$/,
           include: /node_modules\/(@orpc|arktype|drizzle-arktype|@ark)/,
-          type: 'javascript/auto',
+          type: "javascript/auto",
           resolve: {
             fullySpecified: false,
           },
@@ -56,10 +76,8 @@ module.exports = function (options, webpack) {
     resolve: {
       ...options.resolve,
       extensionAlias: {
-        '.js': ['.ts', '.js'],
+        ".js": [".ts", ".js"],
       },
     },
   };
 };
-
-
