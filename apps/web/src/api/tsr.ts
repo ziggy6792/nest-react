@@ -4,7 +4,7 @@ import { contract } from '@contract/users.contract';
 import { ContractRouterClient } from '@orpc/contract';
 import { createTanstackQueryUtils } from '@orpc/tanstack-query';
 
-export const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3000';
+export const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api';
 
 const link = new OpenAPILink(contract, {
   url: API_BASE,

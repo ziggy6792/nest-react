@@ -1,3 +1,3 @@
-export * from "./users.contract.js";
+export * from "./users.contract";
 
 
