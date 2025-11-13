@@ -1,16 +1,15 @@
-import { initQueryClient } from '@ts-rest/react-query';
-import { initClient } from '@ts-rest/core';
-import { users } from '@contract/users.contract';
+import { createORPCClient } from '@orpc/client';
+import { OpenAPILink } from '@orpc/openapi-client/fetch';
+import { contract } from '@contract/users.contract';
+import { ContractRouterClient } from '@orpc/contract';
+import { createTanstackQueryUtils } from '@orpc/tanstack-query';
 
 export const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3000';
 
-// Export hooks directly - no wrapping to preserve types
-export const usersHooks = initQueryClient(users, {
-  baseUrl: API_BASE,
-  baseHeaders: {},
+const link = new OpenAPILink(contract, {
+  url: API_BASE,
 });
 
-// Raw client for prefetch/fetch in utils
-export const usersClient = initClient(users, {
-  baseUrl: API_BASE,
-});
+const client: ContractRouterClient<typeof contract> = createORPCClient(link);
+
+export const orpc = createTanstackQueryUtils(client);

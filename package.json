@@ -20,10 +20,12 @@
     "node": ">=18"
   },
   "dependencies": {
+    "@orpc/client": "^1.6.6",
+    "@orpc/contract": "^1.6.6",
+    "@orpc/nest": "^1.6.6",
+    "@orpc/openapi-client": "^1.6.6",
+    "@orpc/tanstack-query": "^1.6.6",
     "@tanstack/react-query": "^5.90.7",
-    "@ts-rest/core": "^3.52.1",
-    "@ts-rest/nest": "^3.52.1",
-    "@ts-rest/react-query": "^3.52.1",
     "zod": "^3.22.3"
   }
 }

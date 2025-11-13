@@ -1,7 +1,5 @@
+import { oc } from '@orpc/contract';
 import { z } from 'zod';
-import { initContract } from '@ts-rest/core';
-
-const c = initContract();
 
 export const User = z.object({
   id: z.number(),
@@ -12,26 +10,38 @@ export const CreateUser = z.object({
   name: z.string().min(1),
 });
 
-export const users = c.router(
-  {
-    list: {
-      method: 'GET',
-      path: '/users',
-      responses: { 200: z.array(User) },
-    },
-    byId: {
-      method: 'GET',
-      path: '/users/:id',
-      pathParams: z.object({ id: z.string() }),
-      responses: { 200: User },
-    },
-    add: {
-      method: 'POST',
-      path: '/users',
-      body: CreateUser,
-      responses: { 201: User },
-    },
+export const contract = {
+  users: {
+    list: oc
+      .route({
+        method: 'GET',
+        path: '/users',
+      })
+      .output(z.array(User)),
+    byId: oc
+      .route({
+        method: 'GET',
+        path: '/users/:id',
+      })
+      .input(
+        z.object({
+          params: z.object({
+            id: z.string(),
+          }),
+        }),
+      )
+      .output(User),
+    add: oc
+      .route({
+        method: 'POST',
+        path: '/users',
+      })
+      .input(
+        z.object({
+          body: CreateUser,
+        }),
+      )
+      .output(User),
   },
-  { pathPrefix: '/api' }
-);
+};
 

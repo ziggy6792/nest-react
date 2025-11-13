@@ -2,6 +2,7 @@
   "name": "api",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "predev": "nest build && tsc-alias -p tsconfig.build.json",
     "dev": "nest start --watch",
@@ -20,8 +21,9 @@
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
-    "@ts-rest/core": "^3.52.1",
-    "@ts-rest/nest": "^3.52.1",
+    "@orpc/nest": "^1.6.6",
+    "@orpc/openapi": "^1.6.6",
+    "@orpc/zod": "^1.6.6",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "zod": "^3.22.3"

@@ -1,16 +1,19 @@
 import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { users } from '../api';
 
 export function AddUser() {
   const [name, setName] = useState('');
+  const queryClient = useQueryClient();
 
-  // Use hooks directly - full type safety preserved
-  const add = users.hooks.add.useMutation({
-    onSuccess: () => {
-      // tRPC-like utils: typed invalidation with extracted types
-      users.utils.list.invalidate();
-    },
-  });
+  const add = useMutation(
+    users.add.mutationOptions({
+      onSuccess: () => {
+        // Invalidate the list query to refetch
+        queryClient.invalidateQueries({ queryKey: users.list.queryKey({ input: {} }) });
+      },
+    }),
+  );
 
   return (
     <form
