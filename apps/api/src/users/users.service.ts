@@ -1,9 +1,7 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
-import { eq, InferInsertModel, InferSelectModel } from 'drizzle-orm';
-import type { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { eq, InferInsertModel } from 'drizzle-orm';
 import { users } from '../server/db/schema';
-
-type Database = LibSQLDatabase<typeof import('../server/db/schema.js')>;
+import type { Database } from '../server/db';
 
 type NewUser = InferInsertModel<typeof users>;
 
