@@ -14,7 +14,7 @@ export function UsersList() {
   return (
     <ul>
       {data?.map((u) => (
-        <li key={u.id}>{u.name}</li>
+        <li key={u.id}>{u.createdAt.toISOString()}</li>
       ))}
     </ul>
   );
