@@ -3,7 +3,27 @@ const swcDefaultConfig = require('@nestjs/cli/lib/compiler/defaults/swc-defaults
 module.exports = function (options, webpack) {
   return {
     ...options,
-    externals: [],
+    externalsPresets: {
+      node: true, // Externalize Node.js built-ins
+    },
+    externals: [
+      // Externalize all node_modules, but bundle @orpc packages and their ESM dependencies
+      function ({ request, context }, callback) {
+        if (request && !request.startsWith('.') && !request.startsWith('/')) {
+          // Bundle @orpc packages (ESM-only)
+          if (request.startsWith('@orpc/')) {
+            return callback();
+          }
+          // Bundle dependencies imported from @orpc packages (like rou3)
+          if (context && typeof context === 'string' && context.includes('@orpc')) {
+            return callback();
+          }
+          // Externalize everything else
+          return callback(null, `commonjs ${request}`);
+        }
+        callback();
+      },
+    ],
     module: {
       ...options.module,
       rules: [

@@ -1,36 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { User } from '../contracts/users.contract.js';
 import type { z } from 'zod';
+import { eq } from 'drizzle-orm';
+import type { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { users } from '../server/db/schema.js';
 
 type UserType = z.infer<typeof User>;
+type Database = LibSQLDatabase<typeof import('../server/db/schema.js')>;
 
 @Injectable()
 export class UsersService {
-  private readonly _users: UserType[] = [
-    { id: 1, name: 'Alice' },
-    { id: 2, name: 'Bob' },
-    { id: 3, name: 'Charlie' },
-  ];
+  constructor(@Inject('DB') private readonly db: Database) {}
 
-  findAll(): UserType[] {
-    return this._users;
+  async findAll(): Promise<UserType[]> {
+    return await this.db.select().from(users);
   }
 
-  findOne(id: string): UserType {
-    const user = this._users.find((u) => u.id === Number(id));
-    if (!user) {
-      throw new Error(`User with id ${id} not found`);
+  async findOne(id: string): Promise<UserType> {
+    const result = await this.db
+      .select()
+      .from(users)
+      .where(eq(users.id, Number(id)))
+      .limit(1);
+    
+    if (result.length === 0) {
+      throw new NotFoundException(`User with id ${id} not found`);
     }
-    return user;
+    
+    return result[0]!;
   }
 
-  create(createUser: { name: string }): UserType {
-    const newUser: UserType = {
-      id: Math.max(...this._users.map((u) => u.id)) + 1,
-      name: createUser.name,
-    };
-    this._users.push(newUser);
-    return newUser;
+  async create(createUser: { name: string }): Promise<UserType> {
+    const result = await this.db
+      .insert(users)
+      .values({ name: createUser.name })
+      .returning();
+    
+    return result[0]!;
   }
 }
 
