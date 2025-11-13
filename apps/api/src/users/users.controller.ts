@@ -1,9 +1,11 @@
-import { Controller } from '@nestjs/common';
-import { Implement, implement } from '@orpc/nest';
-import { contract } from '../contracts/users.contract';
-import { UsersService } from './users.service';
-import { InferInsertModel } from 'drizzle-orm';
-import { users } from 'src/server/db/schema';
+import { Controller } from "@nestjs/common";
+import { Implement, implement, populateContractRouterPaths } from "@orpc/nest";
+import { usersContract } from "../contracts/users.contract";
+import { UsersService } from "./users.service";
+import { InferInsertModel } from "drizzle-orm";
+import { users } from "src/server/db/schema";
+
+const contract = populateContractRouterPaths(usersContract);
 
 type NewUser = InferInsertModel<typeof users>;
 
@@ -27,9 +29,8 @@ export class UsersController {
 
   @Implement(contract.users.add)
   add() {
-    return implement(contract.users.add).handler(({ input }) => {      
+    return implement(contract.users.add).handler(({ input }) => {
       return this.svc.create(input.body);
     });
   }
 }
-

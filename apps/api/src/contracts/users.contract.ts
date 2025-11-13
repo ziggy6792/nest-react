@@ -1,37 +1,35 @@
-import { oc } from '@orpc/contract';
-import { type } from 'arktype';
-import { users } from '../server/db/schema';
-import { createSelectSchema , createInsertSchema } from 'drizzle-arktype';
+import { oc } from "@orpc/contract";
+import { type } from "arktype";
+import { users } from "../server/db/schema";
+import { createSelectSchema, createInsertSchema } from "drizzle-arktype";
 
 const userSelectSchema = createSelectSchema(users);
 const userInsertSchema = createInsertSchema(users);
 
-export const contract = {
+// Define the contract structure (frontend-safe, no NestJS dependencies)
+export const usersContract = {
   users: {
     list: oc
       .route({
-        method: 'GET',
-        path: '/users',
+        method: "GET",
       })
       .output(userSelectSchema.array()),
     byId: oc
       .route({
-        method: 'GET',
-        path: '/users/:id',
+        method: "GET",
       })
       .input(
         type({
           params: type({
-            id: 'string',
+            id: "string",
           }),
         }),
       )
       .output(userSelectSchema),
-      // .output(userSelectSchema.onDeepUndeclaredKey('delete')), example
+    // .output(userSelectSchema.onDeepUndeclaredKey('delete')), example
     add: oc
       .route({
-        method: 'POST',
-        path: '/users',
+        method: "POST",
       })
       .input(
         type({
