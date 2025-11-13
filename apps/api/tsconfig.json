@@ -4,6 +4,7 @@
     "baseUrl": "./",
     "outDir": "./dist",
     "module": "ESNext",
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "strictNullChecks": true
   }
 }

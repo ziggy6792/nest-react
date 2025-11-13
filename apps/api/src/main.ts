@@ -5,7 +5,7 @@ import { NestFactory } from '@nestjs/core';
 import { OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { OpenAPIGenerator } from '@orpc/openapi';
-import { ZodToJsonSchemaConverter } from '@orpc/zod';
+import { experimental_ArkTypeToJsonSchemaConverter as ArkTypeToJsonSchemaConverter } from '@orpc/arktype';
 import { contract } from './contracts/users.contract';
 
 async function bootstrap() {
@@ -18,7 +18,7 @@ async function bootstrap() {
 
   // Generate OpenAPI spec from oRPC contract
   const openAPIGenerator = new OpenAPIGenerator({
-    schemaConverters: [new ZodToJsonSchemaConverter()],
+    schemaConverters: [new ArkTypeToJsonSchemaConverter()],
   });
 
   const orpcSpec = await openAPIGenerator.generate(contract, {

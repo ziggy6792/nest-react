@@ -1,11 +1,10 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { User } from '../contracts/users.contract.js';
-import type { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import type { LibSQLDatabase } from 'drizzle-orm/libsql';
 import { users } from '../server/db/schema.js';
 
-type UserType = z.infer<typeof User>;
+type UserType = typeof User.infer;
 type Database = LibSQLDatabase<typeof import('../server/db/schema.js')>;
 
 @Injectable()

@@ -1,13 +1,13 @@
 import { oc } from '@orpc/contract';
-import { z } from 'zod';
+import { type } from 'arktype';
 
-export const User = z.object({
-  id: z.number(),
-  name: z.string(),
+export const User = type({
+  id: 'number',
+  name: 'string',
 });
 
-export const CreateUser = z.object({
-  name: z.string().min(1),
+export const CreateUser = type({
+  name: 'string>0',
 });
 
 export const contract = {
@@ -17,16 +17,16 @@ export const contract = {
         method: 'GET',
         path: '/users',
       })
-      .output(z.array(User)),
+      .output(User.array()),
     byId: oc
       .route({
         method: 'GET',
         path: '/users/:id',
       })
       .input(
-        z.object({
-          params: z.object({
-            id: z.string(),
+        type({
+          params: type({
+            id: 'string',
           }),
         }),
       )
@@ -37,7 +37,7 @@ export const contract = {
         path: '/users',
       })
       .input(
-        z.object({
+        type({
           body: CreateUser,
         }),
       )
