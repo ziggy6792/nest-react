@@ -8,8 +8,21 @@ import { sqliteTableCreator } from "drizzle-orm/sqlite-core";
  */
 export const createTable = sqliteTableCreator((name) => `demo_${name}`);
 
+export const timestamps = (d: any) => ({
+  // Milliseconds since epoch; change mode if you prefer seconds or Date
+  createdAt: d
+    .integer({ mode: "timestamp_ms" })
+    .$defaultFn(() => new Date())
+    .notNull(),
+  updatedAt: d
+    .integer({ mode: "timestamp_ms" })
+    .$defaultFn(() => new Date())
+    .$onUpdateFn(() => new Date())
+    .notNull(),
+});
+
 export const users = createTable("user", (d) => ({
   id: d.integer({ mode: "number" }).primaryKey({ autoIncrement: true }),
   name: d.text().notNull(),
+  ...timestamps(d),
 }));
-

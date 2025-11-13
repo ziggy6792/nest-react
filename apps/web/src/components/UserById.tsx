@@ -13,5 +13,5 @@ export function UserById({ id }: { id: string }) {
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error</div>;
 
-  return <div>{data?.name}</div>;
+  return <div>{data?.createdAt}</div>;
 }
