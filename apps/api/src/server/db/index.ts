@@ -17,7 +17,7 @@ const globalForDb = globalThis as unknown as {
 export const client =
   globalForDb.client ??
   createClient({
-    url: process.env.DATABASE_URL,
+    url: process.env.DATABASE_URL!,
   });
 if (process.env.NODE_ENV !== "production") globalForDb.client = client;
 

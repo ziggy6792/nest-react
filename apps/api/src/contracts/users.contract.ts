@@ -1,14 +1,10 @@
 import { oc } from '@orpc/contract';
 import { type } from 'arktype';
+import { users } from '../server/db/schema';
+import { createSelectSchema , createInsertSchema } from 'drizzle-arktype';
 
-export const User = type({
-  id: 'number',
-  name: 'string',
-});
-
-export const CreateUser = type({
-  name: 'string>0',
-});
+const userSelectSchema = createSelectSchema(users);
+const userInsertSchema = createInsertSchema(users);
 
 export const contract = {
   users: {
@@ -17,7 +13,7 @@ export const contract = {
         method: 'GET',
         path: '/users',
       })
-      .output(User.array()),
+      .output(userSelectSchema.array()),
     byId: oc
       .route({
         method: 'GET',
@@ -30,7 +26,7 @@ export const contract = {
           }),
         }),
       )
-      .output(User),
+      .output(userSelectSchema),
     add: oc
       .route({
         method: 'POST',
@@ -38,10 +34,9 @@ export const contract = {
       })
       .input(
         type({
-          body: CreateUser,
+          body: userInsertSchema,
         }),
       )
-      .output(User),
+      .output(userSelectSchema),
   },
 };
-

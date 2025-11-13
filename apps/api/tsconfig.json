@@ -5,6 +5,7 @@
     "outDir": "./dist",
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "strict": true,
     "strictNullChecks": true
   }
 }

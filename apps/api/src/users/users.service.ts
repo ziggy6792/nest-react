@@ -1,21 +1,21 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
-import { User } from '../contracts/users.contract.js';
-import { eq } from 'drizzle-orm';
+import { eq, InferInsertModel, InferSelectModel } from 'drizzle-orm';
 import type { LibSQLDatabase } from 'drizzle-orm/libsql';
-import { users } from '../server/db/schema.js';
+import { users } from '../server/db/schema';
 
-type UserType = typeof User.infer;
 type Database = LibSQLDatabase<typeof import('../server/db/schema.js')>;
+
+type NewUser = InferInsertModel<typeof users>;
 
 @Injectable()
 export class UsersService {
   constructor(@Inject('DB') private readonly db: Database) {}
 
-  async findAll(): Promise<UserType[]> {
+  async findAll() {
     return await this.db.select().from(users);
   }
 
-  async findOne(id: string): Promise<UserType> {
+  async findOne(id: string) {
     const result = await this.db
       .select()
       .from(users)
@@ -29,10 +29,11 @@ export class UsersService {
     return result[0]!;
   }
 
-  async create(createUser: { name: string }): Promise<UserType> {
+  async create(createUser: NewUser) {
+    
     const result = await this.db
       .insert(users)
-      .values({ name: createUser.name })
+      .values(createUser)
       .returning();
     
     return result[0]!;

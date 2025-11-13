@@ -14,8 +14,16 @@ module.exports = function (options, webpack) {
           if (request.startsWith('@orpc/')) {
             return callback();
           }
+          // Bundle arktype and drizzle-arktype (ESM-only)
+          if (request === 'arktype' || request === 'drizzle-arktype' || request.startsWith('@ark/') || request.startsWith('ark')) {
+            return callback();
+          }
           // Bundle dependencies imported from @orpc packages (like rou3)
           if (context && typeof context === 'string' && context.includes('@orpc')) {
+            return callback();
+          }
+          // Bundle dependencies imported from arktype-related packages
+          if (context && typeof context === 'string' && (context.includes('arktype') || context.includes('@ark') || context.includes('arkregex'))) {
             return callback();
           }
           // Externalize everything else
@@ -37,7 +45,7 @@ module.exports = function (options, webpack) {
         },
         {
           test: /\.mjs$/,
-          include: /node_modules\/@orpc/,
+          include: /node_modules\/(@orpc|arktype|drizzle-arktype|@ark)/,
           type: 'javascript/auto',
           resolve: {
             fullySpecified: false,

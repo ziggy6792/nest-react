@@ -60,15 +60,21 @@ importers:
       '@nestjs/swagger':
         specifier: ^11.2.1
         version: 11.2.1(@nestjs/common@11.1.8)(@nestjs/core@11.1.8)(reflect-metadata@0.2.2)
+      '@orpc/arktype':
+        specifier: ^1.11.2
+        version: 1.11.2(@ark/schema@0.54.0)(@orpc/contract@1.11.2)(arktype@2.1.26)
       '@orpc/nest':
         specifier: ^1.6.6
         version: 1.11.2(@nestjs/common@11.1.8)(@nestjs/core@11.1.8)(rxjs@7.8.2)
       '@orpc/openapi':
         specifier: ^1.6.6
         version: 1.11.2
-      '@orpc/zod':
-        specifier: ^1.6.6
-        version: 1.11.2(@orpc/contract@1.11.2)(@orpc/server@1.11.2)(zod@3.25.76)
+      arktype:
+        specifier: ^2.0.0
+        version: 2.1.26
+      drizzle-arktype:
+        specifier: ^0.1.3
+        version: 0.1.3(arktype@2.1.26)(drizzle-orm@0.41.0)
       drizzle-orm:
         specifier: ^0.41.0
         version: 0.41.0(@libsql/client@0.14.0)
@@ -78,9 +84,6 @@ importers:
       rxjs:
         specifier: ^7.8.1
         version: 7.8.2
-      zod:
-        specifier: ^3.22.3
-        version: 3.25.76
     devDependencies:
       '@jest/globals':
         specifier: ^29.7.0
@@ -344,6 +347,20 @@ packages:
     transitivePeerDependencies:
       - chokidar
     dev: true
+
+  /@ark/schema@0.54.0:
+    resolution: {integrity: sha512-QloFou+ODfb5qXgPxX1EbJyRqZEwoElzvJ6VuuFVvWJQGoigBEUW3L0HejXG/B9v8K3VvDikuULp5ELSwZn8hg==}
+    dependencies:
+      '@ark/util': 0.54.0
+    dev: false
+
+  /@ark/util@0.53.0:
+    resolution: {integrity: sha512-TGn4gLlA6dJcQiqrtCtd88JhGb2XBHo6qIejsDre+nxpGuUVW4G3YZGVrwjNBTO0EyR+ykzIo4joHJzOj+/cpA==}
+    dev: false
+
+  /@ark/util@0.54.0:
+    resolution: {integrity: sha512-ugTfpEDGA6d2uU2/3M7uRiuPNYckQMhg2wfNMw8zZHXjPhuVCbXWZzIcBojuXuCN8j4MrNWNqQ9z7f8W/JiE8w==}
+    dev: false
 
   /@babel/code-frame@7.27.1:
     resolution: {integrity: sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg==}
@@ -2552,6 +2569,24 @@ packages:
     dependencies:
       consola: 3.4.2
 
+  /@orpc/arktype@1.11.2(@ark/schema@0.54.0)(@orpc/contract@1.11.2)(arktype@2.1.26):
+    resolution: {integrity: sha512-BUfN1d/mtBxgrP29w4lZ89Nb0lpVPF0ORsMcIyr8jX/8z+QLHsOGQbFt7fubwRmVvNFrJcgm5YVjfCQ/BAFjbg==}
+    peerDependencies:
+      '@ark/schema': '*'
+      '@orpc/contract': 1.11.2
+      arktype: '*'
+    dependencies:
+      '@ark/schema': 0.54.0
+      '@orpc/contract': 1.11.2
+      '@orpc/openapi': 1.11.2
+      arktype: 2.1.26
+    transitivePeerDependencies:
+      - '@opentelemetry/api'
+      - crossws
+      - fastify
+      - ws
+    dev: false
+
   /@orpc/client@1.11.2:
     resolution: {integrity: sha512-Fo9rLFAPaDZkq82MZDE3+cjSwGr2u0WBPGegNNVO//vTCbABIuaEdJWvi1dCx9Es+oGIH+MW16lP5pOMmaK20Q==}
     dependencies:
@@ -2576,21 +2611,6 @@ packages:
 
   /@orpc/interop@1.11.2:
     resolution: {integrity: sha512-I10qsBOHcHltEek4DTYN3w8hl6Us3+aH1q3Yj+dqPhtA1dQ/uTDxcT4+XPnzrv4a4CflE6yDxnAREIZIdVz0BQ==}
-    dev: false
-
-  /@orpc/json-schema@1.11.2:
-    resolution: {integrity: sha512-eo7Uhc10r5ulNJ3Cj6MfZPTq7NIy7yf4nT9osNhzsQd+HYfSTp4Li4knYzVe8Zi8V7+ots+wFo+8rfWu5uLT5A==}
-    dependencies:
-      '@orpc/contract': 1.11.2
-      '@orpc/interop': 1.11.2
-      '@orpc/openapi': 1.11.2
-      '@orpc/server': 1.11.2
-      '@orpc/shared': 1.11.2
-    transitivePeerDependencies:
-      - '@opentelemetry/api'
-      - crossws
-      - fastify
-      - ws
     dev: false
 
   /@orpc/nest@1.11.2(@nestjs/common@11.1.8)(@nestjs/core@11.1.8)(rxjs@7.8.2):
@@ -2766,28 +2786,6 @@ packages:
       '@tanstack/query-core': 5.90.7
     transitivePeerDependencies:
       - '@opentelemetry/api'
-    dev: false
-
-  /@orpc/zod@1.11.2(@orpc/contract@1.11.2)(@orpc/server@1.11.2)(zod@3.25.76):
-    resolution: {integrity: sha512-+wMS4a6onDmoW+Koo4nuUaJcE8Ll1MiuAiL2LbNnHvwpAJf/P3+nEEVQzumoOOUZrV1lvlO3+gGuz9Hgwn60DQ==}
-    peerDependencies:
-      '@orpc/contract': 1.11.2
-      '@orpc/server': 1.11.2
-      zod: '>=3.25.0'
-    dependencies:
-      '@orpc/contract': 1.11.2
-      '@orpc/json-schema': 1.11.2
-      '@orpc/openapi': 1.11.2
-      '@orpc/server': 1.11.2
-      '@orpc/shared': 1.11.2
-      escape-string-regexp: 5.0.0
-      wildcard-match: 5.1.4
-      zod: 3.25.76
-    transitivePeerDependencies:
-      - '@opentelemetry/api'
-      - crossws
-      - fastify
-      - ws
     dev: false
 
   /@petamoriken/float16@3.9.3:
@@ -3986,6 +3984,20 @@ packages:
   /argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
 
+  /arkregex@0.0.2:
+    resolution: {integrity: sha512-ttjDUICBVoXD/m8bf7eOjx8XMR6yIT2FmmW9vsN0FCcFOygEZvvIX8zK98tTdXkzi0LkRi5CmadB44jFEIyDNA==}
+    dependencies:
+      '@ark/util': 0.53.0
+    dev: false
+
+  /arktype@2.1.26:
+    resolution: {integrity: sha512-zDwukKV6uTElKCAbIoQ9OU6shXE5ALjvZAqHErOSv6l0iLKlubELZ7AcevYLaWFYr5rmIN4Uv9+dIzInktSO1A==}
+    dependencies:
+      '@ark/schema': 0.54.0
+      '@ark/util': 0.54.0
+      arkregex: 0.0.2
+    dev: false
+
   /array-buffer-byte-length@1.0.2:
     resolution: {integrity: sha512-LHE+8BuR7RYGDKvnrmcuSq3tDcKv9OFEXQt/HpbZhY7V6h0zlUXutnAD82GiFx9rdieCMjkvtcsPqBwgUl1Iiw==}
     engines: {node: '>= 0.4'}
@@ -4830,6 +4842,16 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
+  /drizzle-arktype@0.1.3(arktype@2.1.26)(drizzle-orm@0.41.0):
+    resolution: {integrity: sha512-X66GB2pz7Nb+NmCZefDXpdoglxjGYnB2yRU5umAK2stVkl4rvV6i6XbMg1+w1HiY/ydC8gJVq4jKAARYazpb3g==}
+    peerDependencies:
+      arktype: '>=2.0.0'
+      drizzle-orm: '>=0.36.0'
+    dependencies:
+      arktype: 2.1.26
+      drizzle-orm: 0.41.0(@libsql/client@0.14.0)
+    dev: false
+
   /drizzle-kit@0.30.6:
     resolution: {integrity: sha512-U4wWit0fyZuGuP7iNmRleQyK2V8wCuv57vf5l3MnG4z4fzNTjY/U13M8owyQ5RavqvqxBifWORaR3wIUzlN64g==}
     hasBin: true
@@ -5243,11 +5265,6 @@ packages:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
     dev: true
-
-  /escape-string-regexp@5.0.0:
-    resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
-    engines: {node: '>=12'}
-    dev: false
 
   /escodegen@2.1.0:
     resolution: {integrity: sha512-2NlIDTwUWJN0mRPQOdtQBzbUHvdGY2P1VXSyU83Q3xKxM7WHX2Ql8dKq782Q9TgQUNOLEzEYu9bzLNj1q88I5w==}
@@ -9322,10 +9339,6 @@ packages:
     dependencies:
       isexe: 3.1.1
     dev: true
-
-  /wildcard-match@5.1.4:
-    resolution: {integrity: sha512-wldeCaczs8XXq7hj+5d/F38JE2r7EXgb6WQDM84RVwxy81T/sxB5e9+uZLK9Q9oNz1mlvjut+QtvgaOQFPVq/g==}
-    dev: false
 
   /word-wrap@1.2.5:
     resolution: {integrity: sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==}

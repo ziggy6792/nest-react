@@ -8,6 +8,7 @@
     "build": "nest build && tsc-alias -p tsconfig.build.json",
     "start": "nest start",
     "start:debug": "nest start --debug --watch",
+    "typecheck": "tsc --noEmit",
     "start:prod": "node dist/main",
     "test": "jest",
     "test:watch": "jest --watch",

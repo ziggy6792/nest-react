@@ -12,14 +12,14 @@ export function AddUser() {
         // Invalidate the list query to refetch
         queryClient.invalidateQueries({ queryKey: users.list.queryKey({ input: {} }) });
       },
-    }),
+    })
   );
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        add.mutate({ body: { name } });
+        add.mutate({ body: { name: name } });
         setName('');
       }}>
       <input value={name} onChange={(e) => setName(e.target.value)} placeholder='Name' />

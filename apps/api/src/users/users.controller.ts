@@ -2,6 +2,10 @@ import { Controller } from '@nestjs/common';
 import { Implement, implement } from '@orpc/nest';
 import { contract } from '../contracts/users.contract';
 import { UsersService } from './users.service';
+import { InferInsertModel } from 'drizzle-orm';
+import { users } from 'src/server/db/schema';
+
+type NewUser = InferInsertModel<typeof users>;
 
 @Controller()
 export class UsersController {
@@ -23,8 +27,8 @@ export class UsersController {
 
   @Implement(contract.users.add)
   add() {
-    return implement(contract.users.add).handler(({ input }) => {
-      return this.svc.create({ name: input.body.name });
+    return implement(contract.users.add).handler(({ input }) => {      
+      return this.svc.create(input.body);
     });
   }
 }
