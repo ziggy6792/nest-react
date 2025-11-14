@@ -1,8 +1,8 @@
-import { NestFactory, Reflector } from "@nestjs/core";
-import { ClassSerializerInterceptor, ValidationPipe } from "@nestjs/common";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { NestFactory, Reflector } from '@nestjs/core';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-import { AppModule } from "./app.module";
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,18 +10,18 @@ async function bootstrap() {
   app.enableCors();
 
   const config = new DocumentBuilder()
-    .setTitle("Demo API")
-    .setVersion("1.0")
+    .setTitle('Demo API')
+    .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
 
   // Setup Swagger UI at /api/swagger with JSON spec at /api/swagger/json
-  SwaggerModule.setup("api/swagger", app, document, {
-    jsonDocumentUrl: "/api/swagger/json",
-    customCssUrl: "https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui.css",
+  SwaggerModule.setup('api/swagger', app, document, {
+    jsonDocumentUrl: '/api/swagger/json',
+    customCssUrl: 'https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui.css',
     customJs: [
-      "https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui-bundle.js",
-      "https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui-standalone-preset.js",
+      'https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui-bundle.js',
+      'https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui-standalone-preset.js',
     ],
   });
 
@@ -40,7 +40,7 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT ?? 3000);
 }
 
 void bootstrap();

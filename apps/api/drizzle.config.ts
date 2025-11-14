@@ -1,13 +1,13 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
-import { type Config } from "drizzle-kit";
+import { type Config } from 'drizzle-kit';
 
 export default {
-  schema: "./src/server/db/schema.ts",
-  dialect: "sqlite",
+  schema: './src/server/db/schema.ts',
+  dialect: 'sqlite',
   dbCredentials: {
     url: process.env.DATABASE_URL!,
   },
-  tablesFilter: ["demo_*"],
+  tablesFilter: ['demo_*'],
 } satisfies Config;
 

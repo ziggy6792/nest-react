@@ -1,10 +1,10 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
 
-import { createClient, type Client } from "@libsql/client";
-import { drizzle } from "drizzle-orm/libsql";
+import { createClient, type Client } from '@libsql/client';
+import { drizzle } from 'drizzle-orm/libsql';
 
-import * as schema from "./schema";
+import * as schema from './schema';
 
 /**
  * Cache the database connection in development. This avoids creating a new connection on every HMR
@@ -19,7 +19,7 @@ export const client =
   createClient({
     url: process.env.DATABASE_URL!,
   });
-if (process.env.NODE_ENV !== "production") globalForDb.client = client;
+if (process.env.NODE_ENV !== 'production') globalForDb.client = client;
 
 export const db = drizzle(client, { schema });
 

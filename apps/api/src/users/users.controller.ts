@@ -5,32 +5,27 @@ import {
   Param,
   ParseIntPipe,
   Post,
-} from "@nestjs/common";
-import {
-  ApiTags,
-  ApiOkResponse,
-  ApiCreatedResponse,
-  ApiBody,
-} from "@nestjs/swagger";
-import { UsersService } from "./users.service";
-import { CreateUserDto, UserBaseDto, UserDetailsDto } from "./dto/user.dto";
+} from '@nestjs/common';
 
-@Controller("users")
+import { UsersService } from './users.service';
+import { CreateUserDto, UserDetailsDto } from './dto/user.dto';
+
+@Controller('users')
 export class UsersController {
   constructor(private readonly svc: UsersService) {}
 
-  @Get("list")
+  @Get('list')
   async list(): Promise<UserDetailsDto[]> {
     return this.svc.findAll();
   }
 
-  @Get(":id")
-  async byId(@Param("id", ParseIntPipe) id: number): Promise<UserDetailsDto> {
+  @Get(':id')
+  async byId(@Param('id', ParseIntPipe) id: number): Promise<UserDetailsDto> {
     return this.svc.findOne(id);
   }
 
-  @Post("create")
-  async add(@Body() body: UserBaseDto): Promise<UserDetailsDto> {
+  @Post('create')
+  async add(@Body() body: CreateUserDto): Promise<UserDetailsDto> {
     return this.svc.create(body);
   }
 }
