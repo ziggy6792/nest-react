@@ -14,7 +14,16 @@ async function bootstrap() {
     .setVersion("1.0")
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("api", app, document);
+
+  // Setup Swagger UI at /api/swagger with JSON spec at /api/swagger/json
+  SwaggerModule.setup("api/swagger", app, document, {
+    jsonDocumentUrl: "/api/swagger/json",
+    customCssUrl: "https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui.css",
+    customJs: [
+      "https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui-bundle.js",
+      "https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui-standalone-preset.js",
+    ],
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({

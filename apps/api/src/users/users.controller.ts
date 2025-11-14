@@ -27,9 +27,10 @@ export class UsersController {
     return this.svc.findOne(id);
   }
 
-  @Post()
-  @ApiCreatedResponse({ type: UserDetailsDto })
+  @Post("create")
+  @ApiCreatedResponse({ type: CreateUserDto })
   async add(@Body() body: CreateUserDto): Promise<UserDetailsDto> {
+    console.log("add!!!!!", body);
     return this.svc.create(body);
   }
 }
