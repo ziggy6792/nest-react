@@ -1,7 +1,7 @@
-import { useGetUsersById } from '../api';
+import { useUsersControllerById } from '../api';
 
 export function UserById({ id }: { id: string }) {
-  const { data, isLoading, isError } = useGetUsersById(Number(id));
+  const { data, isLoading, isError } = useUsersControllerById(Number(id));
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error</div>;

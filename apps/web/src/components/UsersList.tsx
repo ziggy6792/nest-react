@@ -1,7 +1,7 @@
-import { useGetUsersList } from '../api';
+import { useUsersControllerList } from '../api';
 
 export function UsersList() {
-  const { data, isLoading, isError } = useGetUsersList();
+  const { data, isLoading, isError } = useUsersControllerList();
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error</div>;
