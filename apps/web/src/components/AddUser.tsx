@@ -1,26 +1,25 @@
 import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { users } from '../api';
+import { useQueryClient } from '@tanstack/react-query';
+import { usePostUsersCreate, getUsersListQueryKey } from '../api';
 
 export function AddUser() {
   const [name, setName] = useState('');
   const queryClient = useQueryClient();
 
-  const add = useMutation(
-    users.add.mutationOptions({
+  const add = usePostUsersCreate({
+    mutation: {
       onSuccess: () => {
         // Invalidate the list query to refetch
-        queryClient.invalidateQueries({ queryKey: users.list.queryKey({ input: {} }) });
+        queryClient.invalidateQueries({ queryKey: getUsersListQueryKey() });
       },
-    })
-  );
+    },
+  });
 
   return (
     <form
       onSubmit={async (e) => {
         e.preventDefault();
-        const result = await add.mutateAsync({ body: { name: name, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() } });
-        console.log(result.foo);
+        await add.mutateAsync({ body: { name } });
         setName('');
       }}>
       <input value={name} onChange={(e) => setName(e.target.value)} placeholder='Name' />

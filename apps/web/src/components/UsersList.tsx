@@ -1,12 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
-import { users } from '../api';
+import { useGetUsersList } from '../api';
 
 export function UsersList() {
-  const { data, isLoading, isError } = useQuery(
-    users.list.queryOptions({
-      input: {},
-    })
-  );
+  const { data, isLoading, isError } = useGetUsersList();
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error</div>;
@@ -14,11 +9,9 @@ export function UsersList() {
   return (
     <ul>
       {data?.map((u) => (
-        <>
-          <li key={u.id}>
-            {u.id} {u.name} {new Date(u.createdAt).toISOString()}
-          </li>
-        </>
+        <li key={u.id}>
+          {u.id} {u.name} {new Date(u.createdAt).toISOString()}
+        </li>
       ))}
     </ul>
   );

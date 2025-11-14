@@ -15,9 +15,6 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "types": ["vite/client"],
-    "paths": {
-      "@contract/*": ["../api/src/contracts/*"]
-    },
 
     /* Linting */
     "strict": true,

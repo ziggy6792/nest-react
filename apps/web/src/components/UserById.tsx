@@ -1,14 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
-import { users } from '../api';
+import { useGetUsersById } from '../api';
 
 export function UserById({ id }: { id: string }) {
-  const { data, isLoading, isError } = useQuery(
-    users.byId.queryOptions({
-      input: {
-        params: { id, type: 'foo' },
-      },
-    })
-  );
+  const { data, isLoading, isError } = useGetUsersById(Number(id));
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error</div>;
