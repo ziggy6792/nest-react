@@ -29,6 +29,8 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       transform: true,
+      // throw an error if a non-whitelisted property is found
+      forbidNonWhitelisted: true,
     }),
   );
 
