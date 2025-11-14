@@ -6,14 +6,9 @@ import {
   ParseIntPipe,
   Post,
 } from "@nestjs/common";
-import {
-  ApiTags,
-  ApiOkResponse,
-  ApiCreatedResponse,
-  ApiBody,
-} from "@nestjs/swagger";
+
 import { UsersService } from "./users.service";
-import { CreateUserDto, UserBaseDto, UserDetailsDto } from "./dto/user.dto";
+import { CreateUserDto, UserDetailsDto } from "./dto/user.dto";
 
 @Controller("users")
 export class UsersController {
@@ -30,7 +25,7 @@ export class UsersController {
   }
 
   @Post("create")
-  async add(@Body() body: UserBaseDto): Promise<UserDetailsDto> {
+  async add(@Body() body: CreateUserDto): Promise<UserDetailsDto> {
     return this.svc.create(body);
   }
 }

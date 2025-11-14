@@ -30,7 +30,6 @@ export class UsersService {
   }
 
   async create(data: CreateUserDto): Promise<UserDetailsDto> {
-    console.log("create", data);
     const result = await this.db
       .insert(users)
       .values({ name: data.name })
