@@ -29,3 +29,6 @@ export const users = createTable("user", (d) => ({
   name: d.text().notNull(),
   ...timestamps(d),
 }));
+
+export type UserRow = typeof users.$inferSelect;
+export type NewUserRow = typeof users.$inferInsert;

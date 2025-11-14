@@ -6,29 +6,30 @@ import {
   ParseIntPipe,
   Post,
 } from "@nestjs/common";
+import { ApiTags, ApiOkResponse, ApiCreatedResponse } from "@nestjs/swagger";
 import { UsersService } from "./users.service";
+import { CreateUserDto, UserDetailsDto } from "./dto/user.dto";
 
-class CreateUserDto {
-  name: string;
-}
-
+@ApiTags("users")
 @Controller("users")
 export class UsersController {
   constructor(private readonly svc: UsersService) {}
 
   @Get("list")
-  async list() {
+  @ApiOkResponse({ type: [UserDetailsDto] })
+  async list(): Promise<UserDetailsDto[]> {
     return this.svc.findAll();
   }
 
   @Get(":id")
-  async byId(@Param("id", ParseIntPipe) id: number) {
+  @ApiOkResponse({ type: UserDetailsDto })
+  async byId(@Param("id", ParseIntPipe) id: number): Promise<UserDetailsDto> {
     return this.svc.findOne(id);
   }
 
   @Post()
-  async add(@Body() body: CreateUserDto) {
-    // Nest will return 201 by default for POST
-    return this.svc.create({ name: body.name });
+  @ApiCreatedResponse({ type: UserDetailsDto })
+  async add(@Body() body: CreateUserDto): Promise<UserDetailsDto> {
+    return this.svc.create(body);
   }
 }

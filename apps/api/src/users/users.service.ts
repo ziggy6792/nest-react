@@ -2,16 +2,20 @@ import { Injectable, Inject, NotFoundException } from "@nestjs/common";
 import { eq } from "drizzle-orm";
 import { users } from "../server/db/schema";
 import type { Database } from "../server/db";
+import { UserDetailsDto } from "./dto/user.dto";
+import { CreateUserDto } from "./dto/user.dto";
+import { toUserDetailsDto } from "./user.mapper";
 
 @Injectable()
 export class UsersService {
   constructor(@Inject("DB") private readonly db: Database) {}
 
-  async findAll() {
-    return await this.db.select().from(users);
+  async findAll(): Promise<UserDetailsDto[]> {
+    const rows = await this.db.select().from(users);
+    return rows.map(toUserDetailsDto);
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<UserDetailsDto> {
     const result = await this.db
       .select()
       .from(users)
@@ -22,12 +26,15 @@ export class UsersService {
       throw new NotFoundException(`User with id ${id} not found`);
     }
 
-    return { ...result[0], foo: "bar" } as typeof users.$inferSelect; // example of a property that is stripped by the contract
+    return toUserDetailsDto(result[0]);
   }
 
-  async create(createUser: typeof users.$inferInsert) {
-    const result = await this.db.insert(users).values(createUser).returning();
+  async create(data: CreateUserDto): Promise<UserDetailsDto> {
+    const result = await this.db
+      .insert(users)
+      .values({ name: data.name })
+      .returning();
 
-    return { ...result[0], foo: "bar" as const };
+    return toUserDetailsDto(result[0]);
   }
 }
