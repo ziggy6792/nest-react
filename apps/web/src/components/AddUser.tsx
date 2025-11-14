@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useUsersControllerAdd, getUsersControllerListQueryKey } from '../api';
+import { api } from '../api';
 
 export function AddUser() {
   const [name, setName] = useState('');
   const queryClient = useQueryClient();
 
-  const add = useUsersControllerAdd({
+  const add = api.users.add.useMutation({
     mutation: {
       onSuccess: () => {
         // Invalidate the list query to refetch
-        queryClient.invalidateQueries({ queryKey: getUsersControllerListQueryKey() });
+        queryClient.invalidateQueries({ queryKey: api.users.list.queryKey() });
       },
     },
   });
