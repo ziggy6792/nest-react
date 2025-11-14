@@ -1,33 +1,29 @@
-import {
-  useUsersControllerList,
-  useUsersControllerById,
-  useUsersControllerAdd,
-  getUsersControllerListQueryKey,
-  getUsersControllerByIdQueryKey,
-  usersControllerList,
-} from './generated/users/users';
-import { useAppControllerGetHello, getAppControllerGetHelloQueryKey } from './generated/app/app';
+import * as users from './generated/users/users';
+import * as app from './generated/app/app';
 
 // Create the nested API structure with proper typing
 export const api = {
   users: {
     list: {
-      useQuery: useUsersControllerList,
-      queryKey: getUsersControllerListQueryKey,
-      getUsersList: usersControllerList,
+      useQuery: users.useUsersControllerList,
+      queryKey: users.getUsersControllerListQueryKey,
+      call: users.usersControllerList,
     },
     byId: {
-      useQuery: useUsersControllerById,
-      queryKey: getUsersControllerByIdQueryKey,
+      useQuery: users.useUsersControllerById,
+      queryKey: users.getUsersControllerByIdQueryKey,
+      call: users.usersControllerById,
     },
     add: {
-      useMutation: useUsersControllerAdd,
+      useMutation: users.useUsersControllerAdd,
+      call: users.usersControllerAdd,
     },
   },
   app: {
     getHello: {
-      useQuery: useAppControllerGetHello,
-      queryKey: getAppControllerGetHelloQueryKey,
+      useQuery: app.useAppControllerGetHello,
+      queryKey: app.getAppControllerGetHelloQueryKey,
+      call: app.appControllerGetHello,
     },
   },
 } as const;
