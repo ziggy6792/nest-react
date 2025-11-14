@@ -8,7 +8,10 @@ import { sqliteTableCreator } from "drizzle-orm/sqlite-core";
  */
 export const createTable = sqliteTableCreator((name) => `demo_${name}`);
 
-export const timestamps = (d: any) => ({
+// Infer the builder type from createTable to preserve type information
+type TableBuilder = Parameters<Parameters<typeof createTable>[1]>[0];
+
+export const timestamps = (d: TableBuilder) => ({
   // Milliseconds since epoch; change mode if you prefer seconds or Date
   createdAt: d
     .integer({ mode: "timestamp_ms" })

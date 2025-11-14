@@ -30,7 +30,7 @@ export class UsersController {
   @Implement(contract.users.add)
   add() {
     return implement(contract.users.add).handler(async ({ input }) => {
-      return this.svc.create(input.body) as any;
+      return this.svc.create(input.body);
     });
   }
 }

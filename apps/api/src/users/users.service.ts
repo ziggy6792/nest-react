@@ -30,6 +30,7 @@ export class UsersService {
   async create(createUser: NewUser) {
     const result = await this.db.insert(users).values(createUser).returning();
 
-    return { ...result[0] };
+    result[0].createdAt;
+    return { ...result[0], foo: "bar" as const };
   }
 }
