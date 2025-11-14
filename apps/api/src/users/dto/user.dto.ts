@@ -2,10 +2,12 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsInt, IsString, MinLength } from "class-validator";
 import { UserRow } from "../../server/db/schema";
 import { createPartialDTO } from "src/utils/create-partial-dto";
+import { Expose } from "class-transformer";
 
 export class UserBaseDto {
   @ApiProperty({ example: 1 })
   @IsInt()
+  @Expose()
   id: UserRow["id"];
 
   @ApiProperty({ example: "John Doe" })
