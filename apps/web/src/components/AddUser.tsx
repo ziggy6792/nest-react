@@ -17,9 +17,10 @@ export function AddUser() {
 
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
-        add.mutate({ body: { name: name, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() } });
+        const result = await add.mutateAsync({ body: { name: name, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() } });
+        console.log(result.foo);
         setName('');
       }}>
       <input value={name} onChange={(e) => setName(e.target.value)} placeholder='Name' />

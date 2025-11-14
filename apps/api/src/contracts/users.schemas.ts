@@ -16,7 +16,7 @@ export const userInsertSchema = createInsertSchema(users, {
   updatedAt: () => type("string").pipe((v) => new Date(v)),
 });
 
-export type InsertUser = typeof userInsertSchema.infer;
+export type UserInsert = typeof userInsertSchema.infer;
 
 // Extended output schema for add route with foo property
 export const userAddOutputSchema = userSelectSchema.merge(
@@ -25,4 +25,4 @@ export const userAddOutputSchema = userSelectSchema.merge(
   }),
 );
 
-export type UserAddOutputSchema = typeof userAddOutputSchema.infer;
+export type UserAddResponse = typeof userAddOutputSchema.infer;
