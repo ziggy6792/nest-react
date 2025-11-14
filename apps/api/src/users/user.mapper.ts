@@ -12,7 +12,7 @@ export function toUserDetailsDto(row: UserRow) {
   });
 }
 
-// Example this would throw 500 error due to validation errors
+// Example this would throw 422 error due to validation errors
 // export function toUserDetailsDto(row: UserRow) {
-//   return mapDto(UserDetailsDto, { ...row, name: '' });
+//   return mapDto(UserDetailsDto, { ...row, name: '', capitalizedName: '' });
 // }
