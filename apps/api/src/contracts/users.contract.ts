@@ -3,17 +3,15 @@ import { type } from "arktype";
 import { users } from "../server/db/schema";
 import { createSelectSchema, createInsertSchema } from "drizzle-arktype";
 
-export const userSelectSchema = createSelectSchema(users, {
-  createdAt: () =>
-    type("Date | string").pipe((v) =>
-      v instanceof Date ? v.toISOString() : v,
-    ),
-  updatedAt: () =>
-    type("Date | string").pipe((v) =>
-      v instanceof Date ? v.toISOString() : v,
-    ),
+const userSelectSchema = createSelectSchema(users, {
+  createdAt: () => type("Date").pipe((v) => v.toISOString()),
+  updatedAt: () => type("Date").pipe((v) => v.toISOString()),
 });
-const userInsertSchema = createInsertSchema(users);
+
+const userInsertSchema = createInsertSchema(users).omit(
+  "createdAt",
+  "updatedAt",
+);
 
 // Define the contract structure (frontend-safe, no NestJS dependencies)
 export const usersContract = {

@@ -7,9 +7,23 @@ import { NestFactory } from "@nestjs/core";
 
 import { OpenAPIObject, SwaggerModule } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
-import { OpenAPIGenerator } from "@orpc/openapi";
+import { JSONSchemaFormat, OpenAPIGenerator } from "@orpc/openapi";
 import { experimental_ArkTypeToJsonSchemaConverter as ArkTypeToJsonSchemaConverter } from "@orpc/arktype";
 import { usersContract } from "./contracts/users.contract";
+
+const jsonConverterOptions = {
+  fallback: {
+    date: (ctx) => ({
+      ...ctx.base,
+      type: "string",
+      format: JSONSchemaFormat.DateTime,
+    }),
+    morph: (ctx) => ({
+      ...ctx.base,
+      type: "string",
+    }),
+  },
+};
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -21,26 +35,26 @@ async function bootstrap() {
 
   // Generate OpenAPI spec from oRPC contract
   const openAPIGenerator = new OpenAPIGenerator({
-    schemaConverters: [new ArkTypeToJsonSchemaConverter()],
+    schemaConverters: [new ArkTypeToJsonSchemaConverter(jsonConverterOptions)],
   });
 
-  // const orpcSpec = (await openAPIGenerator.generate(usersContract, {
-  //   info: {
-  //     title: "API",
-  //     version: "1.0.0",
-  //   },
-  //   servers: [{ url: "/api" }],
-  // })) as OpenAPIObject;
+  const orpcSpec = (await openAPIGenerator.generate(usersContract, {
+    info: {
+      title: "API",
+      version: "1.0.0",
+    },
+    servers: [{ url: "/api" }],
+  })) as OpenAPIObject;
 
-  // // Setup Swagger UI at /api/swagger with JSON spec at /api/swagger/json
-  // SwaggerModule.setup("api/swagger", app, orpcSpec, {
-  //   jsonDocumentUrl: "/api/swagger/json",
-  //   customCssUrl: "https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui.css",
-  //   customJs: [
-  //     "https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui-bundle.js",
-  //     "https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui-standalone-preset.js",
-  //   ],
-  // });
+  // Setup Swagger UI at /api/swagger with JSON spec at /api/swagger/json
+  SwaggerModule.setup("api/swagger", app, orpcSpec, {
+    jsonDocumentUrl: "/api/swagger/json",
+    customCssUrl: "https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui.css",
+    customJs: [
+      "https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui-bundle.js",
+      "https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui-standalone-preset.js",
+    ],
+  });
 
   await app.listen(3000);
 }
