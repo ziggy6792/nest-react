@@ -19,7 +19,7 @@ export function AddUser() {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        add.mutate({ body: { name: name } });
+        add.mutate({ body: { name: name, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() } });
         setName('');
       }}>
       <input value={name} onChange={(e) => setName(e.target.value)} placeholder='Name' />
