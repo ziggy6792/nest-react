@@ -15,7 +15,17 @@ export const usersContract = {
       .route({
         method: "GET",
       })
-      .output(userSelectSchema.array()),
+      .output(
+        userSelectSchema
+          // Technically we should cast the dates, but we can do on client side, its simple
+          // .merge(
+          //   type({
+          //     createdAt: () => type("Date").pipe((v) => v.toISOString()),
+          //     updatedAt: () => type("Date").pipe((v) => v.toISOString()),
+          //   }),
+          // )
+          .array(),
+      ),
     byId: oc
       .route({
         method: "GET",
