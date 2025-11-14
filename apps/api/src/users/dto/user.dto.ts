@@ -4,7 +4,9 @@ import { UserRow } from '../../server/db/schema';
 import { createPartialDTO } from '../../utils/create-partial-dto';
 import { Expose } from 'class-transformer';
 
-export class UserBaseDto {
+// Base class for all user DTOs
+// This class is not exported, it is only used to create other DTOs
+class UserBaseDto {
   @Expose()
   @ApiProperty({ example: 1 })
   @IsInt()
