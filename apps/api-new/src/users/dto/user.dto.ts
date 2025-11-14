@@ -1,27 +1,24 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsString, MinLength } from 'class-validator';
+import { UserRow } from '../../server/db/schema';
 import { createPartialDTO } from '../../utils/create-partial-dto';
 import { Expose } from 'class-transformer';
 
 export class UserBaseDto {
   @ApiProperty({ example: 1 })
   @IsInt()
-  @Expose()
-  id: number;
+  id: UserRow['id'];
 
   @ApiProperty({ example: 'John Doe' })
   @IsString()
   @MinLength(1)
-  @Expose()
-  name: string;
+  name: UserRow['name'];
 
   @ApiProperty({ type: String, format: 'date-time' })
-  @Expose()
-  createdAt: Date;
+  createdAt: UserRow['createdAt'];
 
   @ApiProperty({ type: String, format: 'date-time' })
-  @Expose()
-  updatedAt: Date;
+  updatedAt: UserRow['updatedAt'];
 }
 
 export class UserDetailsDto extends createPartialDTO(UserBaseDto, [
