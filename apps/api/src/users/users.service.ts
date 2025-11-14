@@ -1,36 +1,33 @@
-import { Injectable } from '@nestjs/common';
-import { User } from '../contracts/users.contract';
-import type { z } from 'zod';
-
-type UserType = z.infer<typeof User>;
+import { Injectable, Inject, NotFoundException } from "@nestjs/common";
+import { eq } from "drizzle-orm";
+import { users } from "../server/db/schema";
+import type { Database } from "../server/db";
 
 @Injectable()
 export class UsersService {
-  private readonly _users: UserType[] = [
-    { id: 1, name: 'Alice' },
-    { id: 2, name: 'Bob' },
-    { id: 3, name: 'Charlie' },
-  ];
+  constructor(@Inject("DB") private readonly db: Database) {}
 
-  findAll(): UserType[] {
-    return this._users;
+  async findAll() {
+    return await this.db.select().from(users);
   }
 
-  findOne(id: string): UserType {
-    const user = this._users.find((u) => u.id === Number(id));
-    if (!user) {
-      throw new Error(`User with id ${id} not found`);
+  async findOne(id: number) {
+    const result = await this.db
+      .select()
+      .from(users)
+      .where(eq(users.id, id))
+      .limit(1);
+
+    if (result.length === 0) {
+      throw new NotFoundException(`User with id ${id} not found`);
     }
-    return user;
+
+    return { ...result[0], foo: "bar" } as typeof users.$inferSelect; // example of a property that is stripped by the contract
   }
 
-  create(createUser: { name: string }): UserType {
-    const newUser: UserType = {
-      id: Math.max(...this._users.map((u) => u.id)) + 1,
-      name: createUser.name,
-    };
-    this._users.push(newUser);
-    return newUser;
+  async create(createUser: typeof users.$inferInsert) {
+    const result = await this.db.insert(users).values(createUser).returning();
+
+    return { ...result[0], foo: "bar" as const };
   }
 }
-

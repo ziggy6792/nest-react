@@ -1,30 +1,34 @@
-import { Controller } from '@nestjs/common';
-import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
-import { users } from '../contracts/users.contract';
-import { UsersService } from './users.service';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+} from "@nestjs/common";
+import { UsersService } from "./users.service";
 
-@Controller()
+class CreateUserDto {
+  name: string;
+}
+
+@Controller("users")
 export class UsersController {
   constructor(private readonly svc: UsersService) {}
 
-  @TsRestHandler(users)
-  handler(): ReturnType<typeof tsRestHandler<typeof users>> {
-    return tsRestHandler(users, {
-      list: async () => ({
-        status: 200,
-        body: await this.svc.findAll(),
-      }),
-      byId: async ({ params }) => ({
-        status: 200,
-        body: await this.svc.findOne(params.id),
-      }),
-      add: async ({ body }) => {
-        return {
-          status: 201 as const,
-          body: await this.svc.create({ name: body.name }),
-        };
-      },
-    });
+  @Get("list")
+  async list() {
+    return this.svc.findAll();
+  }
+
+  @Get(":id")
+  async byId(@Param("id", ParseIntPipe) id: number) {
+    return this.svc.findOne(id);
+  }
+
+  @Post()
+  async add(@Body() body: CreateUserDto) {
+    // Nest will return 201 by default for POST
+    return this.svc.create({ name: body.name });
   }
 }
-
