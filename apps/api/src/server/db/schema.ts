@@ -31,5 +31,3 @@ export const users = createTable('user', (d) => ({
 }));
 
 export type UserRow = typeof users.$inferSelect;
-export type NewUserRow = typeof users.$inferInsert;
-

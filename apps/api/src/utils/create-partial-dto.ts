@@ -1,28 +1,31 @@
-import 'reflect-metadata';
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Type } from '@nestjs/common';
 
 export function createPartialDTO<
-  T,
+  T extends object,
   K extends keyof T,
   O extends boolean = false,
->(ClassRef: new () => T, keys: readonly K[], makeOptional?: O) {
+>(ClassRef: Type<T>, keys: readonly K[], makeOptional?: O) {
   type PickedType = Pick<T, K>;
   type ResultType = O extends true ? Partial<PickedType> : PickedType;
 
-  // Use Nest's PickType to get a proper subclass with all metadata (validators, swagger, etc.)
-  const BaseClass = (PickType as any)(ClassRef, keys) as new () => any;
+  // Let Nest build a proper class with all decorators.
+  // We cast to `Type<any>` to keep the `extends` happy.
+  const BasePicked = PickType(
+    ClassRef as Type<any>,
+    keys as readonly (string | number | symbol)[],
+  ) as Type<any>;
 
-  class PartialDTOClass extends BaseClass {
-    constructor(entity?: Partial<T>) {
+  class PartialDTOClass extends BasePicked {
+    constructor(entity: Partial<T>) {
       super();
-      if (entity) {
-        (keys as K[]).forEach((key) => {
-          if (entity[key] !== undefined) {
-            (this as any)[key] = entity[key];
-          }
-        });
-      }
+      if (!entity) return;
+
+      (keys as K[]).forEach((key) => {
+        if (entity[key] !== undefined) {
+          (this as any)[key] = entity[key];
+        }
+      });
     }
 
     static fromEntity(entity: T): PartialDTOClass {
@@ -30,28 +33,28 @@ export function createPartialDTO<
     }
   }
 
-  // Optionally override Swagger `required` and ensure @Expose is present on the final class
+  // Adjust Swagger metadata (only the "required" flag).
   keys.forEach((key) => {
     const propertyKey = key as string;
 
-    const metadata = Reflect.getMetadata(
+    const swaggerMeta = Reflect.getMetadata(
       'swagger/apiModelProperties',
       ClassRef.prototype,
       propertyKey,
     );
-    if (metadata) {
+
+    if (swaggerMeta) {
       ApiProperty({
-        ...metadata,
-        required: !makeOptional,
+        ...swaggerMeta,
+        // If makeOptional is true, mark not required; otherwise leave as-is.
+        required:
+          makeOptional === true ? false : (swaggerMeta.required ?? true),
       })(PartialDTOClass.prototype, propertyKey);
     }
-
-    // Ensure Expose is present on the final class (even if it already exists on the base)
-    Expose()(PartialDTOClass.prototype, propertyKey);
   });
 
   return PartialDTOClass as unknown as {
-    new (entity?: Partial<T>): ResultType;
+    new (entity: Partial<T>): ResultType;
     fromEntity(entity: T): ResultType;
   };
 }

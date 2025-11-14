@@ -5,28 +5,33 @@ import { createPartialDTO } from '../../utils/create-partial-dto';
 import { Expose } from 'class-transformer';
 
 export class UserBaseDto {
+  @Expose()
   @ApiProperty({ example: 1 })
   @IsInt()
   id: UserRow['id'];
 
+  @Expose()
   @ApiProperty({ example: 'John Doe' })
   @IsString()
   @MinLength(1)
   name: UserRow['name'];
 
+  @Expose()
   @ApiProperty({ type: String, format: 'date-time' })
   createdAt: UserRow['createdAt'];
 
+  @Expose()
   @ApiProperty({ type: String, format: 'date-time' })
   updatedAt: UserRow['updatedAt'];
 }
 
-export class UserDetailsDto extends createPartialDTO(UserBaseDto, [
-  'id',
-  'name',
-  'createdAt',
-  'updatedAt',
-] as const) {}
+export class UserDetailsDto extends UserBaseDto {
+  @ApiProperty({ example: 'John Doe' })
+  @IsString()
+  @MinLength(1)
+  @Expose()
+  capitalizedName: string;
+}
 
 export class CreateUserDto extends createPartialDTO(UserBaseDto, [
   'name',

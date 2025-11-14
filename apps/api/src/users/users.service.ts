@@ -2,7 +2,7 @@ import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { users } from '../server/db/schema';
 import type { Database } from '../server/db';
-import { UserDetailsDto } from './dto/user.dto';
+import { UserBaseDto, UserDetailsDto } from './dto/user.dto';
 import { CreateUserDto } from './dto/user.dto';
 import { toUserDetailsDto } from './user.mapper';
 
