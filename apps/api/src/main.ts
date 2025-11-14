@@ -31,12 +31,6 @@ async function bootstrap() {
     }),
   );
 
-  process.on("SIGTERM", async () => {
-    console.log("SIGTERM signal received");
-    await app.close();
-    process.exit(0);
-  });
-
   await app.listen(3000);
 }
 
