@@ -13,6 +13,13 @@ const userInsertSchema = createInsertSchema(users).omit(
   "updatedAt",
 );
 
+// Extended output schema for add route with foo property
+const userAddOutputSchema = userSelectSchema.merge(
+  type({
+    foo: "'bar'",
+  }),
+);
+
 // Define the contract structure (frontend-safe, no NestJS dependencies)
 export const usersContract = {
   users: {
@@ -44,6 +51,6 @@ export const usersContract = {
           body: userInsertSchema,
         }),
       )
-      .output(userSelectSchema),
+      .output(userAddOutputSchema),
   },
 };
