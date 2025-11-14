@@ -2,23 +2,11 @@ import { oc } from "@orpc/contract";
 import { type } from "arktype";
 import { users } from "../server/db/schema";
 import { createSelectSchema, createInsertSchema } from "drizzle-arktype";
-
-const userSelectSchema = createSelectSchema(users, {
-  createdAt: () => type("Date").pipe((v) => v.toISOString()),
-  updatedAt: () => type("Date").pipe((v) => v.toISOString()),
-});
-
-const userInsertSchema = createInsertSchema(users).omit(
-  "createdAt",
-  "updatedAt",
-);
-
-// Extended output schema for add route with foo property
-const userAddOutputSchema = userSelectSchema.merge(
-  type({
-    foo: "'bar'",
-  }),
-);
+import {
+  userSelectSchema,
+  userInsertSchema,
+  userAddOutputSchema,
+} from "./users.schemas";
 
 // Define the contract structure (frontend-safe, no NestJS dependencies)
 export const usersContract = {

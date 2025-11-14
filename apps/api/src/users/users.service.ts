@@ -2,6 +2,7 @@ import { Injectable, Inject, NotFoundException } from "@nestjs/common";
 import { eq } from "drizzle-orm";
 import { users } from "../server/db/schema";
 import type { Database } from "../server/db";
+import { userAddOutputSchema } from "src/contracts/users.schemas";
 
 type NewUser = typeof users.$inferInsert;
 
@@ -27,7 +28,7 @@ export class UsersService {
     return { ...result[0], foo: "bar" } as typeof users.$inferSelect; // example of a property that is stripped by the contract
   }
 
-  async create(createUser: NewUser) {
+  async create(createUser: NewUser): Promise<typeof userAddOutputSchema.infer> {
     const result = await this.db.insert(users).values(createUser).returning();
 
     result[0].createdAt;
