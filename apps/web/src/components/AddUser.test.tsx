@@ -11,7 +11,8 @@ describe('AddUser', () => {
   it('should render the form with input and button', () => {
     renderWithQueryClient(<AddUser />);
 
-    expect(screen.getByPlaceholderText('Name')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('First Name')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Last Name')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Add' })).toBeInTheDocument();
   });
 
@@ -19,16 +20,20 @@ describe('AddUser', () => {
     const user = userEvent.setup();
     renderWithQueryClient(<AddUser />);
 
-    const input = screen.getByPlaceholderText('Name');
-    await user.type(input, 'John Doe');
+    const firstNameInput = screen.getByPlaceholderText('First Name');
+    const lastNameInput = screen.getByPlaceholderText('Last Name');
+    await user.type(firstNameInput, 'John');
+    await user.type(lastNameInput, 'Doe');
 
-    expect(input).toHaveValue('John Doe');
+    expect(firstNameInput).toHaveValue('John');
+    expect(lastNameInput).toHaveValue('Doe');
   });
 
   it('should submit the form and create user', async () => {
     const mockUser: UserDetailsDto = {
       id: 1,
-      name: 'Jane Smith',
+      firstName: 'Jane',
+      lastName: 'Smith',
       createdAt: '2024-01-01T00:00:00.000Z',
       updatedAt: '2024-01-01T00:00:00.000Z',
       capitalizedName: 'JANE SMITH',
@@ -40,15 +45,18 @@ describe('AddUser', () => {
     const user = userEvent.setup();
     renderWithQueryClient(<AddUser />);
 
-    const input = screen.getByPlaceholderText('Name');
+    const firstNameInput = screen.getByPlaceholderText('First Name');
+    const lastNameInput = screen.getByPlaceholderText('Last Name');
     const button = screen.getByRole('button', { name: 'Add' });
 
-    await user.type(input, 'Jane Smith');
+    await user.type(firstNameInput, 'Jane');
+    await user.type(lastNameInput, 'Smith');
     await user.click(button);
 
     await waitFor(
       () => {
-        expect(input).toHaveValue('');
+        expect(firstNameInput).toHaveValue('');
+        expect(lastNameInput).toHaveValue('');
       },
       { timeout: 2000 }
     );
@@ -58,15 +66,18 @@ describe('AddUser', () => {
     const user = userEvent.setup();
     renderWithQueryClient(<AddUser />);
 
-    const input = screen.getByPlaceholderText('Name');
+    const firstNameInput = screen.getByPlaceholderText('First Name');
+    const lastNameInput = screen.getByPlaceholderText('Last Name');
     const button = screen.getByRole('button', { name: 'Add' });
 
-    await user.type(input, 'Test User');
+    await user.type(firstNameInput, 'Test');
+    await user.type(lastNameInput, 'User');
     await user.click(button);
 
     await waitFor(
       () => {
-        expect(input).toHaveValue('');
+        expect(firstNameInput).toHaveValue('');
+        expect(lastNameInput).toHaveValue('');
       },
       { timeout: 2000 }
     );

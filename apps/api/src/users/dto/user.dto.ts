@@ -13,10 +13,16 @@ class UserBaseDto {
   id: UserRow['id'];
 
   @Expose()
-  @ApiProperty({ example: 'John Doe' })
+  @ApiProperty({ example: 'John' })
   @IsString()
   @MinLength(1)
-  name: UserRow['name'];
+  firstName: UserRow['firstName'];
+
+  @Expose()
+  @ApiProperty({ example: 'Doe' })
+  @IsString()
+  @MinLength(1)
+  lastName: UserRow['lastName'];
 
   @Expose()
   @ApiProperty({ type: String, format: 'date-time' })
@@ -36,5 +42,6 @@ export class UserDetailsDto extends UserBaseDto {
 }
 
 export class CreateUserDto extends createPartialDTO(UserBaseDto, [
-  'name',
+  'firstName',
+  'lastName',
 ] as const) {}

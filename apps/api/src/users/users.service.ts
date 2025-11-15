@@ -30,10 +30,7 @@ export class UsersService {
   }
 
   async create(data: CreateUserDto): Promise<UserDetailsDto> {
-    const result = await this.db
-      .insert(users)
-      .values({ name: data.name })
-      .returning();
+    const result = await this.db.insert(users).values(data).returning();
 
     return toUserDetailsDto(result[0]);
   }

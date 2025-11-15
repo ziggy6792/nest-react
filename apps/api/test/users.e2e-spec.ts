@@ -88,9 +88,10 @@ describe('UsersController (e2e)', () => {
 
     it('should return all users', async () => {
       // Create test users
-      await testApp.db
-        .insert(schema.users)
-        .values([{ name: 'Alice Smith' }, { name: 'Bob Johnson' }]);
+      await testApp.db.insert(schema.users).values([
+        { firstName: 'Alice', lastName: 'Smith' },
+        { firstName: 'Bob', lastName: 'Johnson' },
+      ]);
 
       return request(testApp.app.getHttpServer())
         .get('/users')
@@ -109,7 +110,9 @@ describe('UsersController (e2e)', () => {
     });
 
     it('should return users in correct format', async () => {
-      await testApp.db.insert(schema.users).values({ name: 'Test User' });
+      await testApp.db
+        .insert(schema.users)
+        .values({ firstName: 'Test', lastName: 'User' });
 
       return request(testApp.app.getHttpServer())
         .get('/users')
@@ -130,7 +133,7 @@ describe('UsersController (e2e)', () => {
     it('should return a user by id', async () => {
       const [user] = await testApp.db
         .insert(schema.users)
-        .values({ name: 'Jane Doe' })
+        .values({ firstName: 'Jane', lastName: 'Doe' })
         .returning();
 
       return request(testApp.app.getHttpServer())

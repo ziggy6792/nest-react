@@ -26,7 +26,8 @@ export const timestamps = (d: TableBuilder) => ({
 
 export const users = createTable('user', (d) => ({
   id: d.integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
-  name: d.text().notNull(),
+  firstName: d.text().notNull(),
+  lastName: d.text().notNull(),
   ...timestamps(d),
 }));
 

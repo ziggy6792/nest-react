@@ -7,7 +7,9 @@
 export interface UserDetailsDto {
   id: number;
   /** @minLength 1 */
-  name: string;
+  firstName: string;
+  /** @minLength 1 */
+  lastName: string;
   createdAt: string;
   updatedAt: string;
   /** @minLength 1 */
@@ -16,6 +18,8 @@ export interface UserDetailsDto {
 
 export interface CreateUserDto {
   /** @minLength 1 */
-  name: string;
+  firstName: string;
+  /** @minLength 1 */
+  lastName: string;
 }
 
