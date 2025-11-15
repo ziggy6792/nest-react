@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, afterEach, afterAll } from 'vitest';
 import request from 'supertest';
 import { App } from 'supertest/types';
 
