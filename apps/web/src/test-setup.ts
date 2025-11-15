@@ -1,14 +1,14 @@
-import '@testing-library/jest-dom';
-import { setupServer } from 'msw/node';
-import { beforeAll, afterEach, afterAll } from 'vitest';
-import { getUsersMock } from './api/generated/users/users.msw';
-import { getAppMock } from './api/generated/app/app.msw';
+import "@testing-library/jest-dom";
+import { setupServer } from "msw/node";
+import { beforeAll, afterEach, afterAll } from "vitest";
+import { getUsersMock } from "./api/generated/users/users.msw";
+import { getAppMock } from "./api/generated/app/app.msw";
 
 // Setup MSW server with auto-generated handlers
 export const server = setupServer(...getUsersMock(), ...getAppMock());
 
 // Establish API mocking before all tests
-beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
+beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 
 // Reset any request handlers that are declared as a part of our tests
 // (i.e. for testing one-time error scenarios)

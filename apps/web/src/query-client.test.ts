@@ -13,4 +13,3 @@ describe("query-client", () => {
     expect(queryClient.getMutationCache).toBeDefined();
   });
 });
-
