@@ -1,5 +1,5 @@
-import React, { ReactElement } from "react";
-import { render, RenderOptions } from "@testing-library/react";
+import type { ReactElement } from "react";
+import { render, type RenderOptions } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 /**
@@ -33,6 +33,3 @@ export const renderWithQueryClient = (
 
   return render(ui, { wrapper: Wrapper, ...options });
 };
-
-// Re-export everything from React Testing Library
-export * from "@testing-library/react";
