@@ -1,7 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 import { IsInt, IsString, MinLength } from 'class-validator';
 import { UserRow } from '../../server/db/schema';
-import { createPartialDTO } from '../../utils/create-partial-dto';
 import { Expose } from 'class-transformer';
 
 // Base class for all user DTOs
@@ -35,6 +34,4 @@ export class UserDetailsDto extends UserBaseDto {
   capitalizedName: string;
 }
 
-export class CreateUserDto extends createPartialDTO(UserBaseDto, [
-  'name',
-] as const) {}
+export class CreateUserDto extends PickType(UserBaseDto, ['name'] as const) {}
