@@ -21,50 +21,50 @@ import type {
 } from '../client.schemas';
 
 
-export const getUsersControllerListResponseMock = (): UserDetailsDto[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), name: faker.string.alpha({length: {min: 1, max: 20}}), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, capitalizedName: faker.string.alpha({length: {min: 1, max: 20}})})))
+export const getUsersControllerFindAllResponseMock = (): UserDetailsDto[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), name: faker.string.alpha({length: {min: 1, max: 20}}), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, capitalizedName: faker.string.alpha({length: {min: 1, max: 20}})})))
 
-export const getUsersControllerByIdResponseMock = (overrideResponse: Partial< UserDetailsDto > = {}): UserDetailsDto => ({id: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), name: faker.string.alpha({length: {min: 1, max: 20}}), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, capitalizedName: faker.string.alpha({length: {min: 1, max: 20}}), ...overrideResponse})
+export const getUsersControllerCreateResponseMock = (overrideResponse: Partial< UserDetailsDto > = {}): UserDetailsDto => ({id: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), name: faker.string.alpha({length: {min: 1, max: 20}}), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, capitalizedName: faker.string.alpha({length: {min: 1, max: 20}}), ...overrideResponse})
 
-export const getUsersControllerAddResponseMock = (overrideResponse: Partial< UserDetailsDto > = {}): UserDetailsDto => ({id: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), name: faker.string.alpha({length: {min: 1, max: 20}}), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, capitalizedName: faker.string.alpha({length: {min: 1, max: 20}}), ...overrideResponse})
+export const getUsersControllerFindOneResponseMock = (overrideResponse: Partial< UserDetailsDto > = {}): UserDetailsDto => ({id: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), name: faker.string.alpha({length: {min: 1, max: 20}}), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, capitalizedName: faker.string.alpha({length: {min: 1, max: 20}}), ...overrideResponse})
 
 
-export const getUsersControllerListMockHandler = (overrideResponse?: UserDetailsDto[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<UserDetailsDto[]> | UserDetailsDto[]), options?: RequestHandlerOptions) => {
-  return http.get('*/users/list', async (info) => {
+export const getUsersControllerFindAllMockHandler = (overrideResponse?: UserDetailsDto[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<UserDetailsDto[]> | UserDetailsDto[]), options?: RequestHandlerOptions) => {
+  return http.get('*/users', async (info) => {
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined
     ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getUsersControllerListResponseMock()),
+    : getUsersControllerFindAllResponseMock()),
       { status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
   }, options)
 }
 
-export const getUsersControllerByIdMockHandler = (overrideResponse?: UserDetailsDto | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<UserDetailsDto> | UserDetailsDto), options?: RequestHandlerOptions) => {
-  return http.get('*/users/:id', async (info) => {
+export const getUsersControllerCreateMockHandler = (overrideResponse?: UserDetailsDto | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<UserDetailsDto> | UserDetailsDto), options?: RequestHandlerOptions) => {
+  return http.post('*/users', async (info) => {
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined
     ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getUsersControllerByIdResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-export const getUsersControllerAddMockHandler = (overrideResponse?: UserDetailsDto | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<UserDetailsDto> | UserDetailsDto), options?: RequestHandlerOptions) => {
-  return http.post('*/users/create', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getUsersControllerAddResponseMock()),
+    : getUsersControllerCreateResponseMock()),
       { status: 201,
         headers: { 'Content-Type': 'application/json' }
       })
   }, options)
 }
+
+export const getUsersControllerFindOneMockHandler = (overrideResponse?: UserDetailsDto | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<UserDetailsDto> | UserDetailsDto), options?: RequestHandlerOptions) => {
+  return http.get('*/users/:id', async (info) => {
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getUsersControllerFindOneResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  }, options)
+}
 export const getUsersMock = () => [
-  getUsersControllerListMockHandler(),
-  getUsersControllerByIdMockHandler(),
-  getUsersControllerAddMockHandler()
+  getUsersControllerFindAllMockHandler(),
+  getUsersControllerCreateMockHandler(),
+  getUsersControllerFindOneMockHandler()
 ]

@@ -35,14 +35,14 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
-export const usersControllerList = (
+export const usersControllerFindAll = (
     
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
       return customInstance<UserDetailsDto[]>(
-      {url: `/users/list`, method: 'GET', signal
+      {url: `/users`, method: 'GET', signal
     },
       options);
     }
@@ -50,66 +50,66 @@ export const usersControllerList = (
 
 
 
-export const getUsersControllerListQueryKey = () => {
+export const getUsersControllerFindAllQueryKey = () => {
     return [
-    `/users/list`
+    `/users`
     ] as const;
     }
 
     
-export const getUsersControllerListQueryOptions = <TData = Awaited<ReturnType<typeof usersControllerList>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerList>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getUsersControllerFindAllQueryOptions = <TData = Awaited<ReturnType<typeof usersControllerFindAll>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getUsersControllerListQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getUsersControllerFindAllQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof usersControllerList>>> = ({ signal }) => usersControllerList(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof usersControllerFindAll>>> = ({ signal }) => usersControllerFindAll(requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof usersControllerList>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindAll>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type UsersControllerListQueryResult = NonNullable<Awaited<ReturnType<typeof usersControllerList>>>
-export type UsersControllerListQueryError = unknown
+export type UsersControllerFindAllQueryResult = NonNullable<Awaited<ReturnType<typeof usersControllerFindAll>>>
+export type UsersControllerFindAllQueryError = unknown
 
 
-export function useUsersControllerList<TData = Awaited<ReturnType<typeof usersControllerList>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerList>>, TError, TData>> & Pick<
+export function useUsersControllerFindAll<TData = Awaited<ReturnType<typeof usersControllerFindAll>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindAll>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof usersControllerList>>,
+          Awaited<ReturnType<typeof usersControllerFindAll>>,
           TError,
-          Awaited<ReturnType<typeof usersControllerList>>
+          Awaited<ReturnType<typeof usersControllerFindAll>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useUsersControllerList<TData = Awaited<ReturnType<typeof usersControllerList>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerList>>, TError, TData>> & Pick<
+export function useUsersControllerFindAll<TData = Awaited<ReturnType<typeof usersControllerFindAll>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindAll>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof usersControllerList>>,
+          Awaited<ReturnType<typeof usersControllerFindAll>>,
           TError,
-          Awaited<ReturnType<typeof usersControllerList>>
+          Awaited<ReturnType<typeof usersControllerFindAll>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useUsersControllerList<TData = Awaited<ReturnType<typeof usersControllerList>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerList>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useUsersControllerFindAll<TData = Awaited<ReturnType<typeof usersControllerFindAll>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useUsersControllerList<TData = Awaited<ReturnType<typeof usersControllerList>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerList>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useUsersControllerFindAll<TData = Awaited<ReturnType<typeof usersControllerFindAll>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getUsersControllerListQueryOptions(options)
+  const queryOptions = getUsersControllerFindAllQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -121,7 +121,65 @@ export function useUsersControllerList<TData = Awaited<ReturnType<typeof usersCo
 
 
 
-export const usersControllerById = (
+export const usersControllerCreate = (
+    createUserDto: CreateUserDto,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<UserDetailsDto>(
+      {url: `/users`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createUserDto, signal
+    },
+      options);
+    }
+  
+
+
+export const getUsersControllerCreateMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersControllerCreate>>, TError,{data: CreateUserDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof usersControllerCreate>>, TError,{data: CreateUserDto}, TContext> => {
+
+const mutationKey = ['usersControllerCreate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof usersControllerCreate>>, {data: CreateUserDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  usersControllerCreate(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UsersControllerCreateMutationResult = NonNullable<Awaited<ReturnType<typeof usersControllerCreate>>>
+    export type UsersControllerCreateMutationBody = CreateUserDto
+    export type UsersControllerCreateMutationError = unknown
+
+    export const useUsersControllerCreate = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersControllerCreate>>, TError,{data: CreateUserDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof usersControllerCreate>>,
+        TError,
+        {data: CreateUserDto},
+        TContext
+      > => {
+
+      const mutationOptions = getUsersControllerCreateMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    export const usersControllerFindOne = (
     id: number,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
@@ -136,66 +194,66 @@ export const usersControllerById = (
 
 
 
-export const getUsersControllerByIdQueryKey = (id?: number,) => {
+export const getUsersControllerFindOneQueryKey = (id?: number,) => {
     return [
     `/users/${id}`
     ] as const;
     }
 
     
-export const getUsersControllerByIdQueryOptions = <TData = Awaited<ReturnType<typeof usersControllerById>>, TError = unknown>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getUsersControllerFindOneQueryOptions = <TData = Awaited<ReturnType<typeof usersControllerFindOne>>, TError = unknown>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getUsersControllerByIdQueryKey(id);
+  const queryKey =  queryOptions?.queryKey ?? getUsersControllerFindOneQueryKey(id);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof usersControllerById>>> = ({ signal }) => usersControllerById(id, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof usersControllerFindOne>>> = ({ signal }) => usersControllerFindOne(id, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof usersControllerById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindOne>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type UsersControllerByIdQueryResult = NonNullable<Awaited<ReturnType<typeof usersControllerById>>>
-export type UsersControllerByIdQueryError = unknown
+export type UsersControllerFindOneQueryResult = NonNullable<Awaited<ReturnType<typeof usersControllerFindOne>>>
+export type UsersControllerFindOneQueryError = unknown
 
 
-export function useUsersControllerById<TData = Awaited<ReturnType<typeof usersControllerById>>, TError = unknown>(
- id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerById>>, TError, TData>> & Pick<
+export function useUsersControllerFindOne<TData = Awaited<ReturnType<typeof usersControllerFindOne>>, TError = unknown>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindOne>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof usersControllerById>>,
+          Awaited<ReturnType<typeof usersControllerFindOne>>,
           TError,
-          Awaited<ReturnType<typeof usersControllerById>>
+          Awaited<ReturnType<typeof usersControllerFindOne>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useUsersControllerById<TData = Awaited<ReturnType<typeof usersControllerById>>, TError = unknown>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerById>>, TError, TData>> & Pick<
+export function useUsersControllerFindOne<TData = Awaited<ReturnType<typeof usersControllerFindOne>>, TError = unknown>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindOne>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof usersControllerById>>,
+          Awaited<ReturnType<typeof usersControllerFindOne>>,
           TError,
-          Awaited<ReturnType<typeof usersControllerById>>
+          Awaited<ReturnType<typeof usersControllerFindOne>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useUsersControllerById<TData = Awaited<ReturnType<typeof usersControllerById>>, TError = unknown>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useUsersControllerFindOne<TData = Awaited<ReturnType<typeof usersControllerFindOne>>, TError = unknown>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useUsersControllerById<TData = Awaited<ReturnType<typeof usersControllerById>>, TError = unknown>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerById>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useUsersControllerFindOne<TData = Awaited<ReturnType<typeof usersControllerFindOne>>, TError = unknown>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getUsersControllerByIdQueryOptions(id,options)
+  const queryOptions = getUsersControllerFindOneQueryOptions(id,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -207,62 +265,3 @@ export function useUsersControllerById<TData = Awaited<ReturnType<typeof usersCo
 
 
 
-export const usersControllerAdd = (
-    createUserDto: CreateUserDto,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return customInstance<UserDetailsDto>(
-      {url: `/users/create`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createUserDto, signal
-    },
-      options);
-    }
-  
-
-
-export const getUsersControllerAddMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersControllerAdd>>, TError,{data: CreateUserDto}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof usersControllerAdd>>, TError,{data: CreateUserDto}, TContext> => {
-
-const mutationKey = ['usersControllerAdd'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof usersControllerAdd>>, {data: CreateUserDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  usersControllerAdd(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UsersControllerAddMutationResult = NonNullable<Awaited<ReturnType<typeof usersControllerAdd>>>
-    export type UsersControllerAddMutationBody = CreateUserDto
-    export type UsersControllerAddMutationError = unknown
-
-    export const useUsersControllerAdd = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersControllerAdd>>, TError,{data: CreateUserDto}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof usersControllerAdd>>,
-        TError,
-        {data: CreateUserDto},
-        TContext
-      > => {
-
-      const mutationOptions = getUsersControllerAddMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    

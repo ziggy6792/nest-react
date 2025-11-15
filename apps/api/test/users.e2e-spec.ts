@@ -21,12 +21,12 @@ describe('UsersController (e2e)', () => {
     await testApp.cleanup();
   });
 
-  describe('POST /users/create', () => {
+  describe('POST /users', () => {
     it('should create a new user', () => {
       const createUserDto = { name: 'John Doe' };
 
       return request(testApp.app.getHttpServer())
-        .post('/users/create')
+        .post('/users')
         .send(createUserDto)
         .expect(201)
         .expect((res) => {
@@ -45,14 +45,14 @@ describe('UsersController (e2e)', () => {
       const createUserDto = { name: '' };
 
       return request(testApp.app.getHttpServer())
-        .post('/users/create')
+        .post('/users')
         .send(createUserDto)
         .expect(400);
     });
 
     it('should reject creation without name field', () => {
       return request(testApp.app.getHttpServer())
-        .post('/users/create')
+        .post('/users')
         .send({})
         .expect(400);
     });
@@ -65,23 +65,23 @@ describe('UsersController (e2e)', () => {
       };
 
       return request(testApp.app.getHttpServer())
-        .post('/users/create')
+        .post('/users')
         .send(createUserDto)
         .expect(400);
     });
 
     it('should reject creation with invalid name type', () => {
       return request(testApp.app.getHttpServer())
-        .post('/users/create')
+        .post('/users')
         .send({ name: 123 })
         .expect(400);
     });
   });
 
-  describe('GET /users/list', () => {
+  describe('GET /users', () => {
     it('should return an empty array when no users exist', () => {
       return request(testApp.app.getHttpServer())
-        .get('/users/list')
+        .get('/users')
         .expect(200)
         .expect([]);
     });
@@ -93,7 +93,7 @@ describe('UsersController (e2e)', () => {
         .values([{ name: 'Alice Smith' }, { name: 'Bob Johnson' }]);
 
       return request(testApp.app.getHttpServer())
-        .get('/users/list')
+        .get('/users')
         .expect(200)
         .expect((res) => {
           expect(Array.isArray(res.body)).toBe(true);
@@ -112,7 +112,7 @@ describe('UsersController (e2e)', () => {
       await testApp.db.insert(schema.users).values({ name: 'Test User' });
 
       return request(testApp.app.getHttpServer())
-        .get('/users/list')
+        .get('/users')
         .expect(200)
         .expect((res) => {
           expect(res.body[0]).toMatchObject({
@@ -171,7 +171,7 @@ describe('UsersController (e2e)', () => {
     it('should create and then retrieve a user', async () => {
       // Create a user
       const createResponse = await request(testApp.app.getHttpServer())
-        .post('/users/create')
+        .post('/users')
         .send({ name: 'Integration Test User' })
         .expect(201);
 
@@ -191,23 +191,23 @@ describe('UsersController (e2e)', () => {
     it('should create multiple users and list them all', async () => {
       // Create multiple users
       await request(testApp.app.getHttpServer())
-        .post('/users/create')
+        .post('/users')
         .send({ name: 'User One' })
         .expect(201);
 
       await request(testApp.app.getHttpServer())
-        .post('/users/create')
+        .post('/users')
         .send({ name: 'User Two' })
         .expect(201);
 
       await request(testApp.app.getHttpServer())
-        .post('/users/create')
+        .post('/users')
         .send({ name: 'User Three' })
         .expect(201);
 
       // List all users
       return request(testApp.app.getHttpServer())
-        .get('/users/list')
+        .get('/users')
         .expect(200)
         .expect((res) => {
           expect(res.body.length).toBe(3);

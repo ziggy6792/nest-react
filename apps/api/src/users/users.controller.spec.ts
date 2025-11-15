@@ -55,7 +55,7 @@ describe('UsersController', () => {
 
       mockUsersService.findAll.mockResolvedValue(mockUsers);
 
-      const result = await controller.list();
+      const result = await controller.findAll();
 
       expect(result).toEqual(mockUsers);
       expect(service.findAll).toHaveBeenCalledTimes(1);
@@ -65,7 +65,7 @@ describe('UsersController', () => {
     it('should return an empty array when no users exist', async () => {
       mockUsersService.findAll.mockResolvedValue([]);
 
-      const result = await controller.list();
+      const result = await controller.findAll();
 
       expect(result).toEqual([]);
       expect(service.findAll).toHaveBeenCalledTimes(1);
@@ -84,7 +84,7 @@ describe('UsersController', () => {
 
       mockUsersService.findOne.mockResolvedValue(mockUser);
 
-      const result = await controller.byId(1);
+      const result = await controller.findOne(1);
 
       expect(result).toEqual(mockUser);
       expect(service.findOne).toHaveBeenCalledTimes(1);
@@ -97,7 +97,9 @@ describe('UsersController', () => {
         new NotFoundException(`User with id ${userId} not found`),
       );
 
-      await expect(controller.byId(userId)).rejects.toThrow(NotFoundException);
+      await expect(controller.findOne(userId)).rejects.toThrow(
+        NotFoundException,
+      );
       expect(service.findOne).toHaveBeenCalledTimes(1);
       expect(service.findOne).toHaveBeenCalledWith(userId);
     });
@@ -116,7 +118,7 @@ describe('UsersController', () => {
 
       mockUsersService.create.mockResolvedValue(mockCreatedUser);
 
-      const result = await controller.add(createUserDto);
+      const result = await controller.create(createUserDto);
 
       expect(result).toEqual(mockCreatedUser);
       expect(service.create).toHaveBeenCalledTimes(1);
@@ -135,7 +137,7 @@ describe('UsersController', () => {
 
       mockUsersService.create.mockResolvedValue(mockCreatedUser);
 
-      const result = await controller.add(createUserDto);
+      const result = await controller.create(createUserDto);
 
       expect(result).toEqual(mockCreatedUser);
       expect(service.create).toHaveBeenCalledWith(createUserDto);
