@@ -48,6 +48,32 @@ This project showcases a complete development stack with:
 pnpm install
 ```
 
+### Environment Variables
+
+The API requires environment variables to be configured. Copy the example file and update as needed:
+
+```bash
+cd apps/api
+cp .env.example .env
+```
+
+The `.env` file should contain at minimum:
+
+- `DATABASE_URL` - SQLite database URL (e.g., `file:./db.sqlite`)
+
+See `apps/api/.env.example` for all available configuration options.
+
+### Database Setup
+
+```bash
+# Navigate to the API directory
+cd apps/api
+
+# Generate and push database schema
+pnpm db:generate    # Generate migration files
+pnpm db:push        # Push schema changes directly to database
+```
+
 ### Development
 
 ```bash
