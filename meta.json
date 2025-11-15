@@ -1,5 +1,5 @@
 {
-  "name": "Kitchen sink",
+  "name": "Demo",
   "description": "Multiple frameworks, both frontend and backend",
   "template": "https://vercel.com/templates/remix/turborepo-kitchensink",
   "maintainedByCoreTeam": true
