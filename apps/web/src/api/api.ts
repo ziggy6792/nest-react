@@ -9,6 +9,11 @@ export const api = {
       queryKey: users.getUsersControllerFindAllQueryKey,
       call: users.usersControllerFindAll,
     },
+    findNames: {
+      useQuery: users.useUsersControllerFindNames,
+      queryKey: users.getUsersControllerFindNamesQueryKey,
+      call: users.usersControllerFindNames,
+    },
     findOne: {
       useQuery: users.useUsersControllerFindOne,
       queryKey: users.getUsersControllerFindOneQueryKey,

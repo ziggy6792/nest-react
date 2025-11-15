@@ -12,6 +12,7 @@ export function AddUser() {
       onSuccess: () => {
         // Invalidate the list query to refetch
         queryClient.invalidateQueries({ queryKey: api.users.findAll.queryKey() });
+        queryClient.invalidateQueries({ queryKey: api.users.findNames.queryKey() });
       },
     },
   });
