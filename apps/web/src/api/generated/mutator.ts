@@ -1,3 +1,5 @@
+import axios, { type AxiosRequestConfig } from 'axios';
+
 export const customInstance = async <T>(
   config: {
     url: string;
@@ -6,27 +8,25 @@ export const customInstance = async <T>(
     data?: unknown;
     signal?: AbortSignal;
   },
-  options?: RequestInit,
+  options?: AxiosRequestConfig,
 ): Promise<T> => {
   const { url, method, headers, data, signal } = config;
 
-  const response = await fetch(`http://localhost:3001${url}`, {
+  const axiosConfig: AxiosRequestConfig = {
+    url: `http://localhost:3001${url}`,
     method,
     headers: {
       'Content-Type': 'application/json',
       ...headers,
       ...options?.headers,
     },
-    body: data ? JSON.stringify(data) : undefined,
+    data,
     signal,
     ...options,
-  });
+  };
 
-  if (!response.ok) {
-    throw new Error(`Request failed: ${response.statusText}`);
-  }
-
-  return response.json();
+  const response = await axios.request<T>(axiosConfig);
+  return response.data;
 };
 
 
