@@ -1,5 +1,5 @@
-import * as users from './generated/users/users';
-import * as app from './generated/app/app';
+import * as users from "./generated/users/users";
+import * as app from "./generated/app/app";
 
 // Create the nested API structure with proper typing
 export const api = {

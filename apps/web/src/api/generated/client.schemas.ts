@@ -10,6 +10,8 @@ export interface UserDetailsDto {
   name: string;
   createdAt: string;
   updatedAt: string;
+  /** @minLength 1 */
+  capitalizedName: string;
 }
 
 export interface CreateUserDto {
