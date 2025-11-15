@@ -8,8 +8,8 @@ function App() {
   return (
     <div className='container'>
       <h1 className='title'>
-        Admin <br />
-        <span>Kitchen Sink</span>
+        Demo <br />
+        <span>NestJs + React</span>
       </h1>
       <div style={{ marginTop: '2rem' }}>
         <h2>Users</h2>
