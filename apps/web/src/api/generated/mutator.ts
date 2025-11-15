@@ -7,10 +7,11 @@ export const customInstance = async <T>(
     headers?: Record<string, string>;
     data?: unknown;
     signal?: AbortSignal;
+    params?: Record<string, unknown>;
   },
   options?: AxiosRequestConfig,
 ): Promise<T> => {
-  const { url, method, headers, data, signal } = config;
+  const { url, method, headers, data, signal, params } = config;
 
   const axiosConfig: AxiosRequestConfig = {
     url: `http://localhost:3001${url}`,
@@ -22,6 +23,7 @@ export const customInstance = async <T>(
     },
     data,
     signal,
+    params,
     ...options,
   };
 
