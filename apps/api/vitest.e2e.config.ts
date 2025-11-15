@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import swc from 'unplugin-swc';
 import { defineConfig } from 'vitest/config';
 import { resolve } from 'path';
@@ -9,6 +10,7 @@ export default defineConfig({
     root: './',
     environment: 'node',
     setupFiles: ['./vitest.setup.ts'],
+    testTimeout: 10000,
   },
   plugins: [
     // This is required to build the test files with SWC
@@ -23,4 +25,3 @@ export default defineConfig({
     },
   },
 });
-

@@ -14,7 +14,13 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
       include: ['src/**/*.(t|j)s'],
-      exclude: ['node_modules', 'test', 'dist'],
+      exclude: [
+        'node_modules',
+        'test',
+        'dist',
+        '**/*.spec.ts',
+        '**/*.e2e-spec.ts',
+      ],
     },
   },
   plugins: [
@@ -30,4 +36,3 @@ export default defineConfig({
     },
   },
 });
-
