@@ -13,4 +13,6 @@ public/dist
 examples
 
 **/db.sqlite
+**/test.db
+**/test.db-*
 **/drizzle

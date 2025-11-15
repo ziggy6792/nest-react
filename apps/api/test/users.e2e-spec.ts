@@ -17,7 +17,7 @@ describe('UsersController (e2e)', () => {
   });
 
   afterAll(async () => {
-    await testApp.app.close();
+    await testApp.cleanup();
   });
 
   describe('POST /users/create', () => {
