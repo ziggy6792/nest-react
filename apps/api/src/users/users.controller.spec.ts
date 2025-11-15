@@ -3,7 +3,11 @@ import { NotFoundException } from '@nestjs/common';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { CreateUserDto, UserDetailsDto } from './dto/user.dto';
+import {
+  CreateUserDto,
+  UserDetailsDto,
+  UserNameDetailsDto,
+} from './dto/user.dto';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -13,6 +17,7 @@ describe('UsersController', () => {
     findAll: vi.fn(),
     findOne: vi.fn(),
     create: vi.fn(),
+    findNames: vi.fn(),
   };
 
   beforeEach(async () => {
@@ -126,11 +131,15 @@ describe('UsersController', () => {
     });
 
     it('should create a user with different name', async () => {
-      const createUserDto: CreateUserDto = { firstName: 'Jane Smith' };
+      const createUserDto: CreateUserDto = {
+        firstName: 'Jane',
+        lastName: 'Smith',
+      };
       const mockCreatedUser: UserDetailsDto = {
         id: 2,
-        firstName: 'Jane Smith',
-        capitalizedName: 'JANE SMITH',
+        firstName: 'Jane',
+        lastName: 'Smith',
+        capitalizedName: 'JANE',
         createdAt: new Date('2024-01-02'),
         updatedAt: new Date('2024-01-02'),
       };
@@ -141,6 +150,105 @@ describe('UsersController', () => {
 
       expect(result).toEqual(mockCreatedUser);
       expect(service.create).toHaveBeenCalledWith(createUserDto);
+    });
+  });
+
+  describe('findNames', () => {
+    it('should return users matching firstName', async () => {
+      const query = { firstName: 'John' };
+      const mockResults: UserNameDetailsDto[] = [
+        {
+          firstName: 'John',
+          lastName: 'Doe',
+          fullName: 'John Doe',
+        },
+        {
+          firstName: 'Johnny',
+          lastName: 'Smith',
+          fullName: 'Johnny Smith',
+        },
+      ];
+
+      mockUsersService.findNames.mockResolvedValue(mockResults);
+
+      const result = await controller.findNames(query);
+
+      expect(result).toEqual(mockResults);
+      expect(service.findNames).toHaveBeenCalledTimes(1);
+      expect(service.findNames).toHaveBeenCalledWith(query);
+    });
+
+    it('should return users matching lastName', async () => {
+      const query = { lastName: 'Smith' };
+      const mockResults: UserNameDetailsDto[] = [
+        {
+          firstName: 'Jane',
+          lastName: 'Smith',
+          fullName: 'Jane Smith',
+        },
+      ];
+
+      mockUsersService.findNames.mockResolvedValue(mockResults);
+
+      const result = await controller.findNames(query);
+
+      expect(result).toEqual(mockResults);
+      expect(service.findNames).toHaveBeenCalledTimes(1);
+      expect(service.findNames).toHaveBeenCalledWith(query);
+    });
+
+    it('should return users matching both firstName and lastName', async () => {
+      const query = { firstName: 'John', lastName: 'Doe' };
+      const mockResults: UserNameDetailsDto[] = [
+        {
+          firstName: 'John',
+          lastName: 'Doe',
+          fullName: 'John Doe',
+        },
+      ];
+
+      mockUsersService.findNames.mockResolvedValue(mockResults);
+
+      const result = await controller.findNames(query);
+
+      expect(result).toEqual(mockResults);
+      expect(service.findNames).toHaveBeenCalledTimes(1);
+      expect(service.findNames).toHaveBeenCalledWith(query);
+    });
+
+    it('should return empty array when no users match', async () => {
+      const query = { firstName: 'NonExistent' };
+      mockUsersService.findNames.mockResolvedValue([]);
+
+      const result = await controller.findNames(query);
+
+      expect(result).toEqual([]);
+      expect(service.findNames).toHaveBeenCalledTimes(1);
+      expect(service.findNames).toHaveBeenCalledWith(query);
+    });
+
+    it('should return all users when no query parameters provided', async () => {
+      const query = {};
+      const mockResults: UserNameDetailsDto[] = [
+        {
+          firstName: 'Alice',
+          lastName: 'Johnson',
+          fullName: 'Alice Johnson',
+        },
+        {
+          firstName: 'Bob',
+          lastName: 'Williams',
+          fullName: 'Bob Williams',
+        },
+      ];
+
+      mockUsersService.findNames.mockResolvedValue(mockResults);
+
+      const result = await controller.findNames(query);
+
+      expect(result).toEqual(mockResults);
+      expect(service.findNames).toHaveBeenCalledTimes(1);
+      expect(service.findNames).toHaveBeenCalledWith(query);
     });
   });
 });

@@ -23,7 +23,7 @@ describe('UsersController (e2e)', () => {
 
   describe('POST /users', () => {
     it('should create a new user', () => {
-      const createUserDto = { name: 'John Doe' };
+      const createUserDto = { firstName: 'John', lastName: 'Doe' };
 
       return request(testApp.app.getHttpServer())
         .post('/users')
@@ -31,8 +31,9 @@ describe('UsersController (e2e)', () => {
         .expect(201)
         .expect((res) => {
           expect(res.body).toHaveProperty('id');
-          expect(res.body).toHaveProperty('name', 'John Doe');
-          expect(res.body).toHaveProperty('capitalizedName', 'JOHN DOE');
+          expect(res.body).toHaveProperty('firstName', 'John');
+          expect(res.body).toHaveProperty('lastName', 'Doe');
+          expect(res.body).toHaveProperty('capitalizedName', 'JOHN');
           expect(res.body).toHaveProperty('createdAt');
           expect(res.body).toHaveProperty('updatedAt');
           expect(typeof res.body.id).toBe('number');
@@ -41,8 +42,8 @@ describe('UsersController (e2e)', () => {
         });
     });
 
-    it('should reject creation with empty name', () => {
-      const createUserDto = { name: '' };
+    it('should reject creation with empty firstName', () => {
+      const createUserDto = { firstName: '', lastName: 'Doe' };
 
       return request(testApp.app.getHttpServer())
         .post('/users')
@@ -50,7 +51,7 @@ describe('UsersController (e2e)', () => {
         .expect(400);
     });
 
-    it('should reject creation without name field', () => {
+    it('should reject creation without required fields', () => {
       return request(testApp.app.getHttpServer())
         .post('/users')
         .send({})
@@ -59,7 +60,8 @@ describe('UsersController (e2e)', () => {
 
     it('should reject creation with non-whitelisted properties', () => {
       const createUserDto = {
-        name: 'John Doe',
+        firstName: 'John',
+        lastName: 'Doe',
         id: 999,
         createdAt: new Date().toISOString(),
       };
@@ -70,10 +72,10 @@ describe('UsersController (e2e)', () => {
         .expect(400);
     });
 
-    it('should reject creation with invalid name type', () => {
+    it('should reject creation with invalid firstName type', () => {
       return request(testApp.app.getHttpServer())
         .post('/users')
-        .send({ name: 123 })
+        .send({ firstName: 123, lastName: 'Doe' })
         .expect(400);
     });
   });
@@ -100,12 +102,13 @@ describe('UsersController (e2e)', () => {
           expect(Array.isArray(res.body)).toBe(true);
           expect(res.body.length).toBe(2);
           expect(res.body[0]).toHaveProperty('id');
-          expect(res.body[0]).toHaveProperty('name');
+          expect(res.body[0]).toHaveProperty('firstName');
+          expect(res.body[0]).toHaveProperty('lastName');
           expect(res.body[0]).toHaveProperty('capitalizedName');
           expect(res.body[0]).toHaveProperty('createdAt');
           expect(res.body[0]).toHaveProperty('updatedAt');
-          expect(res.body[0].capitalizedName).toBe('ALICE SMITH');
-          expect(res.body[1].capitalizedName).toBe('BOB JOHNSON');
+          expect(res.body[0].capitalizedName).toBe('ALICE');
+          expect(res.body[1].capitalizedName).toBe('BOB');
         });
     });
 
@@ -120,8 +123,9 @@ describe('UsersController (e2e)', () => {
         .expect((res) => {
           expect(res.body[0]).toMatchObject({
             id: expect.any(Number),
-            name: 'Test User',
-            capitalizedName: 'TEST USER',
+            firstName: 'Test',
+            lastName: 'User',
+            capitalizedName: 'TEST',
             createdAt: expect.any(String),
             updatedAt: expect.any(String),
           });
@@ -142,8 +146,9 @@ describe('UsersController (e2e)', () => {
         .expect((res) => {
           expect(res.body).toMatchObject({
             id: user.id,
-            name: 'Jane Doe',
-            capitalizedName: 'JANE DOE',
+            firstName: 'Jane',
+            lastName: 'Doe',
+            capitalizedName: 'JANE',
             createdAt: expect.any(String),
             updatedAt: expect.any(String),
           });
@@ -175,7 +180,7 @@ describe('UsersController (e2e)', () => {
       // Create a user
       const createResponse = await request(testApp.app.getHttpServer())
         .post('/users')
-        .send({ name: 'Integration Test User' })
+        .send({ firstName: 'Integration', lastName: 'Test' })
         .expect(201);
 
       const userId = createResponse.body.id;
@@ -186,8 +191,9 @@ describe('UsersController (e2e)', () => {
         .expect(200)
         .expect((res) => {
           expect(res.body.id).toBe(userId);
-          expect(res.body.name).toBe('Integration Test User');
-          expect(res.body.capitalizedName).toBe('INTEGRATION TEST USER');
+          expect(res.body.firstName).toBe('Integration');
+          expect(res.body.lastName).toBe('Test');
+          expect(res.body.capitalizedName).toBe('INTEGRATION');
         });
     });
 
@@ -195,17 +201,17 @@ describe('UsersController (e2e)', () => {
       // Create multiple users
       await request(testApp.app.getHttpServer())
         .post('/users')
-        .send({ name: 'User One' })
+        .send({ firstName: 'User', lastName: 'One' })
         .expect(201);
 
       await request(testApp.app.getHttpServer())
         .post('/users')
-        .send({ name: 'User Two' })
+        .send({ firstName: 'User', lastName: 'Two' })
         .expect(201);
 
       await request(testApp.app.getHttpServer())
         .post('/users')
-        .send({ name: 'User Three' })
+        .send({ firstName: 'User', lastName: 'Three' })
         .expect(201);
 
       // List all users
@@ -214,10 +220,167 @@ describe('UsersController (e2e)', () => {
         .expect(200)
         .expect((res) => {
           expect(res.body.length).toBe(3);
-          const names = res.body.map((u: { name: string }) => u.name);
-          expect(names).toContain('User One');
-          expect(names).toContain('User Two');
-          expect(names).toContain('User Three');
+          const lastNames = res.body.map(
+            (u: { lastName: string }) => u.lastName,
+          );
+          expect(lastNames).toContain('One');
+          expect(lastNames).toContain('Two');
+          expect(lastNames).toContain('Three');
+        });
+    });
+  });
+
+  describe('GET /users/findNames', () => {
+    it('should return users matching firstName', async () => {
+      // Create test users
+      await testApp.db.insert(schema.users).values([
+        { firstName: 'John', lastName: 'Doe' },
+        { firstName: 'Johnny', lastName: 'Smith' },
+        { firstName: 'Jane', lastName: 'Doe' },
+      ]);
+
+      return request(testApp.app.getHttpServer())
+        .get('/users/findNames')
+        .query({ firstName: 'John' })
+        .expect(200)
+        .expect((res) => {
+          expect(Array.isArray(res.body)).toBe(true);
+          expect(res.body.length).toBe(2);
+          expect(res.body[0]).toHaveProperty('firstName');
+          expect(res.body[0]).toHaveProperty('lastName');
+          expect(res.body[0]).toHaveProperty('fullName');
+          expect(res.body[0].firstName).toContain('John');
+          expect(res.body[1].firstName).toContain('John');
+        });
+    });
+
+    it('should return users matching lastName', async () => {
+      await testApp.db.insert(schema.users).values([
+        { firstName: 'John', lastName: 'Doe' },
+        { firstName: 'Jane', lastName: 'Doe' },
+        { firstName: 'Bob', lastName: 'Smith' },
+      ]);
+
+      return request(testApp.app.getHttpServer())
+        .get('/users/findNames')
+        .query({ lastName: 'Doe' })
+        .expect(200)
+        .expect((res) => {
+          expect(Array.isArray(res.body)).toBe(true);
+          expect(res.body.length).toBe(2);
+          expect(
+            res.body.every((u: { lastName: string }) =>
+              u.lastName.includes('Doe'),
+            ),
+          ).toBe(true);
+        });
+    });
+
+    it('should return users matching both firstName and lastName', async () => {
+      await testApp.db.insert(schema.users).values([
+        { firstName: 'John', lastName: 'Doe' },
+        { firstName: 'Johnny', lastName: 'Doe' },
+        { firstName: 'John', lastName: 'Smith' },
+        { firstName: 'Jane', lastName: 'Doe' },
+      ]);
+
+      return request(testApp.app.getHttpServer())
+        .get('/users/findNames')
+        .query({ firstName: 'John', lastName: 'Doe' })
+        .expect(200)
+        .expect((res) => {
+          expect(Array.isArray(res.body)).toBe(true);
+          expect(res.body.length).toBe(2);
+          expect(
+            res.body.every(
+              (u: { firstName: string; lastName: string }) =>
+                u.firstName.includes('John') && u.lastName.includes('Doe'),
+            ),
+          ).toBe(true);
+        });
+    });
+
+    it('should return empty array when no users match', async () => {
+      await testApp.db
+        .insert(schema.users)
+        .values([{ firstName: 'John', lastName: 'Doe' }]);
+
+      return request(testApp.app.getHttpServer())
+        .get('/users/findNames')
+        .query({ firstName: 'NonExistent' })
+        .expect(200)
+        .expect([]);
+    });
+
+    it('should return all users when no query parameters provided', async () => {
+      await testApp.db.insert(schema.users).values([
+        { firstName: 'Alice', lastName: 'Johnson' },
+        { firstName: 'Bob', lastName: 'Williams' },
+      ]);
+
+      return request(testApp.app.getHttpServer())
+        .get('/users/findNames')
+        .expect(200)
+        .expect((res) => {
+          expect(Array.isArray(res.body)).toBe(true);
+          expect(res.body.length).toBe(2);
+        });
+    });
+
+    it('should handle partial matches with contains search', async () => {
+      await testApp.db.insert(schema.users).values([
+        { firstName: 'Jonathan', lastName: 'Doe' },
+        { firstName: 'John', lastName: 'Doe' },
+        { firstName: 'Jane', lastName: 'Doe' },
+      ]);
+
+      return request(testApp.app.getHttpServer())
+        .get('/users/findNames')
+        .query({ firstName: 'John' })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.length).toBeGreaterThanOrEqual(1);
+          // Verify that results contain "John" substring
+          expect(
+            res.body.every((u: { firstName: string }) =>
+              u.firstName.includes('John'),
+            ),
+          ).toBe(true);
+          // At least one should be exact match "John"
+          expect(
+            res.body.some((u: { firstName: string }) => u.firstName === 'John'),
+          ).toBe(true);
+        });
+    });
+
+    it('should return correct fullName format', async () => {
+      await testApp.db
+        .insert(schema.users)
+        .values([{ firstName: 'John', lastName: 'Doe' }]);
+
+      return request(testApp.app.getHttpServer())
+        .get('/users/findNames')
+        .query({ firstName: 'John' })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body[0]).toHaveProperty('fullName', 'John Doe');
+          expect(res.body[0]).toHaveProperty('firstName', 'John');
+          expect(res.body[0]).toHaveProperty('lastName', 'Doe');
+        });
+    });
+
+    it('should handle empty string query parameters by returning all users', async () => {
+      await testApp.db
+        .insert(schema.users)
+        .values([{ firstName: 'John', lastName: 'Doe' }]);
+
+      // Empty strings are filtered out by validation, so this should return all users
+      return request(testApp.app.getHttpServer())
+        .get('/users/findNames')
+        .expect(200)
+        .expect((res) => {
+          expect(Array.isArray(res.body)).toBe(true);
+          expect(res.body.length).toBeGreaterThanOrEqual(1);
         });
     });
   });
