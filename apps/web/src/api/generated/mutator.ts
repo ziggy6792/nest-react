@@ -10,7 +10,7 @@ export const customInstance = async <T>(
 ): Promise<T> => {
   const { url, method, headers, data, signal } = config;
 
-  const response = await fetch(`http://localhost:3000${url}`, {
+  const response = await fetch(`http://localhost:3001${url}`, {
     method,
     headers: {
       'Content-Type': 'application/json',
