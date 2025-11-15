@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), checker({ typescript: true })],
+  plugins: [react(), checker({ typescript: { tsconfigPath: './tsconfig.app.json' } })],
   resolve: {
     alias: {
       src: fileURLToPath(new URL('./src', import.meta.url)),
