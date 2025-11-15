@@ -16,10 +16,30 @@ export interface UserDetailsDto {
   capitalizedName: string;
 }
 
+export interface UserNameDetailsDto {
+  /** @minLength 1 */
+  firstName: string;
+  /** @minLength 1 */
+  lastName: string;
+  /** @minLength 1 */
+  fullName: string;
+}
+
 export interface CreateUserDto {
   /** @minLength 1 */
   firstName: string;
   /** @minLength 1 */
   lastName: string;
 }
+
+export type UsersControllerFindNamesParams = {
+/**
+ * @minLength 1
+ */
+firstName?: string;
+/**
+ * @minLength 1
+ */
+lastName?: string;
+};
 

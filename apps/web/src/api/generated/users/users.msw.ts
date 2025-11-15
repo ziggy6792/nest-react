@@ -17,13 +17,16 @@ import type {
 } from 'msw';
 
 import type {
-  UserDetailsDto
+  UserDetailsDto,
+  UserNameDetailsDto
 } from '../client.schemas';
 
 
 export const getUsersControllerFindAllResponseMock = (): UserDetailsDto[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), firstName: faker.string.alpha({length: {min: 1, max: 20}}), lastName: faker.string.alpha({length: {min: 1, max: 20}}), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, capitalizedName: faker.string.alpha({length: {min: 1, max: 20}})})))
 
 export const getUsersControllerCreateResponseMock = (overrideResponse: Partial< UserDetailsDto > = {}): UserDetailsDto => ({id: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), firstName: faker.string.alpha({length: {min: 1, max: 20}}), lastName: faker.string.alpha({length: {min: 1, max: 20}}), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, capitalizedName: faker.string.alpha({length: {min: 1, max: 20}}), ...overrideResponse})
+
+export const getUsersControllerFindNamesResponseMock = (): UserNameDetailsDto[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({firstName: faker.string.alpha({length: {min: 1, max: 20}}), lastName: faker.string.alpha({length: {min: 1, max: 20}}), fullName: faker.string.alpha({length: {min: 1, max: 20}})})))
 
 export const getUsersControllerFindOneResponseMock = (overrideResponse: Partial< UserDetailsDto > = {}): UserDetailsDto => ({id: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), firstName: faker.string.alpha({length: {min: 1, max: 20}}), lastName: faker.string.alpha({length: {min: 1, max: 20}}), createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`, updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`, capitalizedName: faker.string.alpha({length: {min: 1, max: 20}}), ...overrideResponse})
 
@@ -52,6 +55,18 @@ export const getUsersControllerCreateMockHandler = (overrideResponse?: UserDetai
   }, options)
 }
 
+export const getUsersControllerFindNamesMockHandler = (overrideResponse?: UserNameDetailsDto[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<UserNameDetailsDto[]> | UserNameDetailsDto[]), options?: RequestHandlerOptions) => {
+  return http.get('*/users/findNames', async (info) => {
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getUsersControllerFindNamesResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  }, options)
+}
+
 export const getUsersControllerFindOneMockHandler = (overrideResponse?: UserDetailsDto | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<UserDetailsDto> | UserDetailsDto), options?: RequestHandlerOptions) => {
   return http.get('*/users/:id', async (info) => {
   
@@ -66,5 +81,6 @@ export const getUsersControllerFindOneMockHandler = (overrideResponse?: UserDeta
 export const getUsersMock = () => [
   getUsersControllerFindAllMockHandler(),
   getUsersControllerCreateMockHandler(),
+  getUsersControllerFindNamesMockHandler(),
   getUsersControllerFindOneMockHandler()
 ]
