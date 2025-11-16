@@ -1,5 +1,5 @@
-import { ApiProperty, PickType } from '@nestjs/swagger';
-import { IsInt, IsString, MinLength } from 'class-validator';
+import { ApiProperty, PartialType, PickType } from '@nestjs/swagger';
+import { IsInt, IsString, MinLength, IsOptional } from 'class-validator';
 import { UserRow } from '../../server/db/schema';
 import { Expose } from 'class-transformer';
 
@@ -44,3 +44,18 @@ export class CreateUserDto extends PickType(UserBaseDto, [
   'firstName',
   'lastName',
 ] as const) {}
+
+export class UserNameDetailsDto extends PickType(UserBaseDto, [
+  'firstName',
+  'lastName',
+] as const) {
+  @Expose()
+  @ApiProperty({ example: 'John Doe' })
+  @IsString()
+  @MinLength(1)
+  fullName: string;
+}
+
+export class FindNamesQueryDto extends PartialType(
+  PickType(UserBaseDto, ['firstName', 'lastName'] as const),
+) {}

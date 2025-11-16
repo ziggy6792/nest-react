@@ -1,10 +1,10 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
-import { eq } from 'drizzle-orm';
+import { eq, like, and, SQL } from 'drizzle-orm';
 import { users } from '../server/db/schema';
 import type { Database } from '../server/db';
-import { UserDetailsDto } from './dto/user.dto';
-import { CreateUserDto } from './dto/user.dto';
-import { toUserDetailsDto } from './user.mapper';
+import { UserDetailsDto, UserNameDetailsDto } from './dto/user.dto';
+import { CreateUserDto, FindNamesQueryDto } from './dto/user.dto';
+import { toUserDetailsDto, toUserNameDetailsDto } from './user.mapper';
 
 @Injectable()
 export class UsersService {
@@ -33,5 +33,23 @@ export class UsersService {
     const result = await this.db.insert(users).values(data).returning();
 
     return toUserDetailsDto(result[0]);
+  }
+
+  async findNames(query: FindNamesQueryDto): Promise<UserNameDetailsDto[]> {
+    const conditions: SQL[] = [];
+
+    if (query.firstName) {
+      conditions.push(like(users.firstName, `%${query.firstName}%`));
+    }
+
+    if (query.lastName) {
+      conditions.push(like(users.lastName, `%${query.lastName}%`));
+    }
+
+    const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+
+    const rows = await this.db.select().from(users).where(whereClause);
+
+    return rows.map(toUserNameDetailsDto);
   }
 }

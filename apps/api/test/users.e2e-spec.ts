@@ -198,6 +198,105 @@ describe('UsersController (e2e)', () => {
     });
   });
 
+  describe('GET /users/findNames', () => {
+    beforeEach(async () => {
+      // Create test users for filtering tests
+      await testApp.db.insert(schema.users).values([
+        { firstName: 'John', lastName: 'Doe' },
+        { firstName: 'Jane', lastName: 'Smith' },
+        { firstName: 'Johnny', lastName: 'Johnson' },
+        { firstName: 'Bob', lastName: 'Doe' },
+      ]);
+    });
+
+    it('should filter users by firstName', async () => {
+      return request(testApp.app.getHttpServer())
+        .get('/users/findNames')
+        .query({ firstName: 'John' })
+        .expect(200)
+        .expect((res) => {
+          expect(Array.isArray(res.body)).toBe(true);
+          expect(res.body.length).toBe(2);
+          expect(res.body[0]).toHaveProperty('firstName');
+          expect(res.body[0]).toHaveProperty('lastName');
+          expect(res.body[0]).toHaveProperty('fullName');
+          expect(res.body[0].firstName).toContain('John');
+          expect(res.body[1].firstName).toContain('John');
+        });
+    });
+
+    it('should filter users by lastName', async () => {
+      return request(testApp.app.getHttpServer())
+        .get('/users/findNames')
+        .query({ lastName: 'Doe' })
+        .expect(200)
+        .expect((res) => {
+          expect(Array.isArray(res.body)).toBe(true);
+          expect(res.body.length).toBe(2);
+          expect(res.body[0].lastName).toContain('Doe');
+          expect(res.body[1].lastName).toContain('Doe');
+        });
+    });
+
+    it('should filter users by both firstName and lastName', async () => {
+      return request(testApp.app.getHttpServer())
+        .get('/users/findNames')
+        .query({ firstName: 'John', lastName: 'Doe' })
+        .expect(200)
+        .expect((res) => {
+          expect(Array.isArray(res.body)).toBe(true);
+          expect(res.body.length).toBe(1);
+          expect(res.body[0].firstName).toBe('John');
+          expect(res.body[0].lastName).toBe('Doe');
+          expect(res.body[0].fullName).toBe('John Doe');
+        });
+    });
+
+    it('should return all users when no filters provided', async () => {
+      return request(testApp.app.getHttpServer())
+        .get('/users/findNames')
+        .expect(200)
+        .expect((res) => {
+          expect(Array.isArray(res.body)).toBe(true);
+          expect(res.body.length).toBe(4);
+          res.body.forEach(
+            (user: {
+              firstName: string;
+              lastName: string;
+              fullName: string;
+            }) => {
+              expect(user).toHaveProperty('firstName');
+              expect(user).toHaveProperty('lastName');
+              expect(user).toHaveProperty('fullName');
+              expect(user.fullName).toBe(`${user.firstName} ${user.lastName}`);
+            },
+          );
+        });
+    });
+
+    it('should return empty array when no matches found', async () => {
+      return request(testApp.app.getHttpServer())
+        .get('/users/findNames')
+        .query({ firstName: 'NonExistent' })
+        .expect(200)
+        .expect([]);
+    });
+
+    it('should handle partial matches', async () => {
+      return request(testApp.app.getHttpServer())
+        .get('/users/findNames')
+        .query({ firstName: 'Joh' })
+        .expect(200)
+        .expect((res) => {
+          expect(Array.isArray(res.body)).toBe(true);
+          expect(res.body.length).toBe(2);
+          res.body.forEach((user: { firstName: string }) => {
+            expect(user.firstName).toContain('Joh');
+          });
+        });
+    });
+  });
+
   describe('Integration scenarios', () => {
     it('should create and then retrieve a user', async () => {
       // Create a user

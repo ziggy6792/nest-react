@@ -2,6 +2,7 @@ import './styles.css';
 import { UsersList } from '../components/UsersList';
 import { UserById } from '../components/UserById';
 import { AddUser } from '../components/AddUser';
+import { SearchUsers } from '../components/SearchUsers';
 
 function App() {
   return (
@@ -20,6 +21,9 @@ function App() {
         <div style={{ marginTop: '1rem' }}>
           <h3>Add User</h3>
           <AddUser />
+        </div>
+        <div style={{ marginTop: '1rem' }}>
+          <SearchUsers />
         </div>
       </div>
     </div>

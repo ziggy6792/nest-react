@@ -25,7 +25,9 @@ import type {
 
 import type {
   CreateUserDto,
-  UserDetailsDto
+  UserDetailsDto,
+  UserNameDetailsDto,
+  UsersControllerFindNamesParams
 } from '../client.schemas';
 
 import { customInstance } from '.././mutator';
@@ -179,7 +181,94 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
       return useMutation(mutationOptions, queryClient);
     }
-    export const usersControllerFindOne = (
+    export const usersControllerFindNames = (
+    params?: UsersControllerFindNamesParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<UserNameDetailsDto[]>(
+      {url: `/users/findNames`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+
+
+export const getUsersControllerFindNamesQueryKey = (params?: UsersControllerFindNamesParams,) => {
+    return [
+    `/users/findNames`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getUsersControllerFindNamesQueryOptions = <TData = Awaited<ReturnType<typeof usersControllerFindNames>>, TError = unknown>(params?: UsersControllerFindNamesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindNames>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getUsersControllerFindNamesQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof usersControllerFindNames>>> = ({ signal }) => usersControllerFindNames(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindNames>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type UsersControllerFindNamesQueryResult = NonNullable<Awaited<ReturnType<typeof usersControllerFindNames>>>
+export type UsersControllerFindNamesQueryError = unknown
+
+
+export function useUsersControllerFindNames<TData = Awaited<ReturnType<typeof usersControllerFindNames>>, TError = unknown>(
+ params: undefined |  UsersControllerFindNamesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindNames>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof usersControllerFindNames>>,
+          TError,
+          Awaited<ReturnType<typeof usersControllerFindNames>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useUsersControllerFindNames<TData = Awaited<ReturnType<typeof usersControllerFindNames>>, TError = unknown>(
+ params?: UsersControllerFindNamesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindNames>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof usersControllerFindNames>>,
+          TError,
+          Awaited<ReturnType<typeof usersControllerFindNames>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useUsersControllerFindNames<TData = Awaited<ReturnType<typeof usersControllerFindNames>>, TError = unknown>(
+ params?: UsersControllerFindNamesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindNames>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useUsersControllerFindNames<TData = Awaited<ReturnType<typeof usersControllerFindNames>>, TError = unknown>(
+ params?: UsersControllerFindNamesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerFindNames>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getUsersControllerFindNamesQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const usersControllerFindOne = (
     id: number,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {

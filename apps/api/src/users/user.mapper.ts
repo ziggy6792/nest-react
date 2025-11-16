@@ -1,5 +1,5 @@
 import { UserRow } from '../server/db/schema';
-import { UserDetailsDto } from './dto/user.dto';
+import { UserDetailsDto, UserNameDetailsDto } from './dto/user.dto';
 import { mapDto } from 'src/utils/map-dto';
 
 export function toUserDetailsDto(row: UserRow) {
@@ -9,6 +9,14 @@ export function toUserDetailsDto(row: UserRow) {
     capitalizedName: `${row.firstName.toUpperCase()} ${row.lastName.toUpperCase()}`,
     // this property will be stripped by the mapper
     additionalProperty: 'additional value',
+  });
+}
+
+export function toUserNameDetailsDto(row: UserRow) {
+  return mapDto(UserNameDetailsDto, {
+    firstName: row.firstName,
+    lastName: row.lastName,
+    fullName: `${row.firstName} ${row.lastName}`,
   });
 }
 

@@ -14,6 +14,11 @@ export const api = {
       queryKey: users.getUsersControllerFindOneQueryKey,
       call: users.usersControllerFindOne,
     },
+    findNames: {
+      useQuery: users.useUsersControllerFindNames,
+      queryKey: users.getUsersControllerFindNamesQueryKey,
+      call: users.usersControllerFindNames,
+    },
     create: {
       useMutation: users.useUsersControllerCreate,
       call: users.usersControllerCreate,
