@@ -6,7 +6,7 @@ export function toUserDetailsDto(row: UserRow) {
   // You can do whatever mapping you want here
   return mapDto(UserDetailsDto, {
     ...row,
-    capitalizedName: row.name.toUpperCase(),
+    capitalizedName: `${row.firstName.toUpperCase()} ${row.lastName.toUpperCase()}`,
     // this property will be stripped by the mapper
     additionalProperty: 'additional value',
   });

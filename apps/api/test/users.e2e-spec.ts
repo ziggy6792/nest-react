@@ -23,7 +23,7 @@ describe('UsersController (e2e)', () => {
 
   describe('POST /users', () => {
     it('should create a new user', () => {
-      const createUserDto = { name: 'John Doe' };
+      const createUserDto = { firstName: 'John', lastName: 'Doe' };
 
       return request(testApp.app.getHttpServer())
         .post('/users')
@@ -31,7 +31,8 @@ describe('UsersController (e2e)', () => {
         .expect(201)
         .expect((res) => {
           expect(res.body).toHaveProperty('id');
-          expect(res.body).toHaveProperty('name', 'John Doe');
+          expect(res.body).toHaveProperty('firstName', 'John');
+          expect(res.body).toHaveProperty('lastName', 'Doe');
           expect(res.body).toHaveProperty('capitalizedName', 'JOHN DOE');
           expect(res.body).toHaveProperty('createdAt');
           expect(res.body).toHaveProperty('updatedAt');
@@ -41,8 +42,8 @@ describe('UsersController (e2e)', () => {
         });
     });
 
-    it('should reject creation with empty name', () => {
-      const createUserDto = { name: '' };
+    it('should reject creation with empty firstName', () => {
+      const createUserDto = { firstName: '', lastName: 'Doe' };
 
       return request(testApp.app.getHttpServer())
         .post('/users')
@@ -50,16 +51,33 @@ describe('UsersController (e2e)', () => {
         .expect(400);
     });
 
-    it('should reject creation without name field', () => {
+    it('should reject creation with empty lastName', () => {
+      const createUserDto = { firstName: 'John', lastName: '' };
+
       return request(testApp.app.getHttpServer())
         .post('/users')
-        .send({})
+        .send(createUserDto)
+        .expect(400);
+    });
+
+    it('should reject creation without firstName field', () => {
+      return request(testApp.app.getHttpServer())
+        .post('/users')
+        .send({ lastName: 'Doe' })
+        .expect(400);
+    });
+
+    it('should reject creation without lastName field', () => {
+      return request(testApp.app.getHttpServer())
+        .post('/users')
+        .send({ firstName: 'John' })
         .expect(400);
     });
 
     it('should reject creation with non-whitelisted properties', () => {
       const createUserDto = {
-        name: 'John Doe',
+        firstName: 'John',
+        lastName: 'Doe',
         id: 999,
         createdAt: new Date().toISOString(),
       };
@@ -70,10 +88,17 @@ describe('UsersController (e2e)', () => {
         .expect(400);
     });
 
-    it('should reject creation with invalid name type', () => {
+    it('should reject creation with invalid firstName type', () => {
       return request(testApp.app.getHttpServer())
         .post('/users')
-        .send({ name: 123 })
+        .send({ firstName: 123, lastName: 'Doe' })
+        .expect(400);
+    });
+
+    it('should reject creation with invalid lastName type', () => {
+      return request(testApp.app.getHttpServer())
+        .post('/users')
+        .send({ firstName: 'John', lastName: 123 })
         .expect(400);
     });
   });
@@ -88,9 +113,10 @@ describe('UsersController (e2e)', () => {
 
     it('should return all users', async () => {
       // Create test users
-      await testApp.db
-        .insert(schema.users)
-        .values([{ name: 'Alice Smith' }, { name: 'Bob Johnson' }]);
+      await testApp.db.insert(schema.users).values([
+        { firstName: 'Alice', lastName: 'Smith' },
+        { firstName: 'Bob', lastName: 'Johnson' },
+      ]);
 
       return request(testApp.app.getHttpServer())
         .get('/users')
@@ -99,7 +125,8 @@ describe('UsersController (e2e)', () => {
           expect(Array.isArray(res.body)).toBe(true);
           expect(res.body.length).toBe(2);
           expect(res.body[0]).toHaveProperty('id');
-          expect(res.body[0]).toHaveProperty('name');
+          expect(res.body[0]).toHaveProperty('firstName');
+          expect(res.body[0]).toHaveProperty('lastName');
           expect(res.body[0]).toHaveProperty('capitalizedName');
           expect(res.body[0]).toHaveProperty('createdAt');
           expect(res.body[0]).toHaveProperty('updatedAt');
@@ -109,7 +136,9 @@ describe('UsersController (e2e)', () => {
     });
 
     it('should return users in correct format', async () => {
-      await testApp.db.insert(schema.users).values({ name: 'Test User' });
+      await testApp.db
+        .insert(schema.users)
+        .values({ firstName: 'Test', lastName: 'User' });
 
       return request(testApp.app.getHttpServer())
         .get('/users')
@@ -117,7 +146,8 @@ describe('UsersController (e2e)', () => {
         .expect((res) => {
           expect(res.body[0]).toMatchObject({
             id: expect.any(Number),
-            name: 'Test User',
+            firstName: 'Test',
+            lastName: 'User',
             capitalizedName: 'TEST USER',
             createdAt: expect.any(String),
             updatedAt: expect.any(String),
@@ -130,7 +160,7 @@ describe('UsersController (e2e)', () => {
     it('should return a user by id', async () => {
       const [user] = await testApp.db
         .insert(schema.users)
-        .values({ name: 'Jane Doe' })
+        .values({ firstName: 'Jane', lastName: 'Doe' })
         .returning();
 
       return request(testApp.app.getHttpServer())
@@ -139,7 +169,8 @@ describe('UsersController (e2e)', () => {
         .expect((res) => {
           expect(res.body).toMatchObject({
             id: user.id,
-            name: 'Jane Doe',
+            firstName: 'Jane',
+            lastName: 'Doe',
             capitalizedName: 'JANE DOE',
             createdAt: expect.any(String),
             updatedAt: expect.any(String),
@@ -172,7 +203,7 @@ describe('UsersController (e2e)', () => {
       // Create a user
       const createResponse = await request(testApp.app.getHttpServer())
         .post('/users')
-        .send({ name: 'Integration Test User' })
+        .send({ firstName: 'Integration', lastName: 'Test' })
         .expect(201);
 
       const userId = createResponse.body.id;
@@ -183,8 +214,9 @@ describe('UsersController (e2e)', () => {
         .expect(200)
         .expect((res) => {
           expect(res.body.id).toBe(userId);
-          expect(res.body.name).toBe('Integration Test User');
-          expect(res.body.capitalizedName).toBe('INTEGRATION TEST USER');
+          expect(res.body.firstName).toBe('Integration');
+          expect(res.body.lastName).toBe('Test');
+          expect(res.body.capitalizedName).toBe('INTEGRATION TEST');
         });
     });
 
@@ -192,17 +224,17 @@ describe('UsersController (e2e)', () => {
       // Create multiple users
       await request(testApp.app.getHttpServer())
         .post('/users')
-        .send({ name: 'User One' })
+        .send({ firstName: 'User', lastName: 'One' })
         .expect(201);
 
       await request(testApp.app.getHttpServer())
         .post('/users')
-        .send({ name: 'User Two' })
+        .send({ firstName: 'User', lastName: 'Two' })
         .expect(201);
 
       await request(testApp.app.getHttpServer())
         .post('/users')
-        .send({ name: 'User Three' })
+        .send({ firstName: 'User', lastName: 'Three' })
         .expect(201);
 
       // List all users
@@ -211,10 +243,12 @@ describe('UsersController (e2e)', () => {
         .expect(200)
         .expect((res) => {
           expect(res.body.length).toBe(3);
-          const names = res.body.map((u: { name: string }) => u.name);
-          expect(names).toContain('User One');
-          expect(names).toContain('User Two');
-          expect(names).toContain('User Three');
+          const lastNames = res.body.map(
+            (u: { lastName: string }) => u.lastName,
+          );
+          expect(lastNames).toContain('One');
+          expect(lastNames).toContain('Two');
+          expect(lastNames).toContain('Three');
         });
     });
   });

@@ -3,7 +3,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { api } from '../api';
 
 export function AddUser() {
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const queryClient = useQueryClient();
 
   const add = api.users.create.useMutation({
@@ -19,10 +20,11 @@ export function AddUser() {
     <form
       onSubmit={async (e) => {
         e.preventDefault();
-        await add.mutateAsync({ data: { name } });
-        setName('');
+        await add.mutateAsync({ data: { firstName, lastName } });
+        setFirstName('');
       }}>
-      <input value={name} onChange={(e) => setName(e.target.value)} placeholder='Name' />
+      <input value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder='First Name' />
+      <input value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder='Last Name' />
       <button type='submit' disabled={add.isPending}>
         Add
       </button>

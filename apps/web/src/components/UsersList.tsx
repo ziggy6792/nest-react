@@ -11,7 +11,7 @@ export function UsersList() {
     <ul>
       {data?.map((u: UserDetailsDto) => (
         <li key={u.id}>
-          {u.id} {u.name} {new Date(u.createdAt).toISOString()}
+          {u.id} {u.firstName} {u.lastName} {new Date(u.createdAt).toISOString()}
         </li>
       ))}
     </ul>
