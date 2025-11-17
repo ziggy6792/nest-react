@@ -12,4 +12,3 @@ import { db } from './index';
   exports: ['DB'],
 })
 export class DbModule {}
-

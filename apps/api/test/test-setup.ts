@@ -9,7 +9,7 @@ import { App } from 'supertest/types';
 import { unlinkSync } from 'fs';
 import { AppModule } from '../src/app.module';
 import type { Database } from '../src/server/db';
-import { createTestDatabase, type TestDatabase } from './test-db';
+import { createTestDatabase } from './test-db';
 
 export interface TestApp {
   app: INestApplication<App>;
@@ -72,6 +72,7 @@ export async function createTestApp(): Promise<TestApp> {
       } catch {
         // Ignore if file doesn't exist
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       // Ignore errors if file doesn't exist or is already deleted
     }

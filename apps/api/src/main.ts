@@ -21,7 +21,7 @@ async function bootstrap() {
   if (process.env.NODE_ENV !== 'production') {
     const outDir = join(process.cwd(), 'out');
     const outFile = join(outDir, 'openapi.json');
-    (async () => {
+    void (async () => {
       try {
         await mkdir(outDir, { recursive: true });
         await writeFile(outFile, JSON.stringify(document, null, 2), 'utf-8');

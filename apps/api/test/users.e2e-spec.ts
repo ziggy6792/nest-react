@@ -1,6 +1,13 @@
-import { describe, it, expect, beforeAll, afterEach, afterAll } from 'vitest';
+import {
+  describe,
+  it,
+  expect,
+  beforeAll,
+  afterEach,
+  afterAll,
+  beforeEach,
+} from 'vitest';
 import request from 'supertest';
-import { App } from 'supertest/types';
 
 import * as schema from '../src/server/db/schema';
 import { createTestApp, type TestApp } from './test-setup';

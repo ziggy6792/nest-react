@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType, PickType } from '@nestjs/swagger';
-import { IsInt, IsString, MinLength, IsOptional } from 'class-validator';
+import { IsInt, IsString, MinLength } from 'class-validator';
 import { UserRow } from '../../server/db/schema';
 import { Expose } from 'class-transformer';
 
