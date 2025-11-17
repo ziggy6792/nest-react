@@ -1,6 +1,8 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { mkdir, writeFile } from 'fs/promises';
+import { join } from 'path';
 
 import { AppModule } from './app.module';
 
@@ -14,6 +16,21 @@ async function bootstrap() {
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
+
+  // Write OpenAPI schema to file in dev mode (non-blocking)
+  if (process.env.NODE_ENV !== 'production') {
+    const outDir = join(process.cwd(), 'out');
+    const outFile = join(outDir, 'openapi.json');
+    (async () => {
+      try {
+        await mkdir(outDir, { recursive: true });
+        await writeFile(outFile, JSON.stringify(document, null, 2), 'utf-8');
+        console.log(`OpenAPI schema written to ${outFile}`);
+      } catch (error) {
+        console.warn('Failed to write OpenAPI schema to file:', error);
+      }
+    })();
+  }
 
   // Setup Swagger UI at /api/swagger with JSON spec at /api/swagger/json
   SwaggerModule.setup('swagger', app, document, {

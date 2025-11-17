@@ -16,3 +16,5 @@ examples
 **/test.db
 **/test.db-*
 **/drizzle
+
+**/out
