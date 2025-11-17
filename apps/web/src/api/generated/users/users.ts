@@ -30,7 +30,7 @@ import type {
   UsersControllerFindNamesParams
 } from '../client.schemas';
 
-import { customInstance } from '.././mutator';
+import { customInstance } from '../../mutator';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];

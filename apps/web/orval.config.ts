@@ -15,7 +15,7 @@ export default defineConfig({
       },
       override: {
         mutator: {
-          path: './src/api/generated/mutator.ts',
+          path: './src/api/mutator.ts',
           name: 'customInstance',
         },
         query: {

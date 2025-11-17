@@ -19,7 +19,7 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import { customInstance } from '.././mutator';
+import { customInstance } from '../../mutator';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
