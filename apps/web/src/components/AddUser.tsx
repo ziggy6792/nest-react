@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { api } from '../api';
+import api from 'src/api/api';
 
 export function AddUser() {
   const [firstName, setFirstName] = useState('');

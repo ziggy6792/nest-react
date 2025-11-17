@@ -1,4 +1,4 @@
-import { api } from '../api';
+import api from 'src/api/api';
 
 export function UserById({ id }: { id: string }) {
   const { data, isLoading, isError } = api.users.findOne.useQuery(Number(id));

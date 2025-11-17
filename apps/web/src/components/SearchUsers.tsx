@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
-import { api } from '../api';
 import type { UserNameDetailsDto } from '../api/generated/client.schemas';
+import api from 'src/api/api';
 
 export function SearchUsers() {
   const [firstName, setFirstName] = useState('');

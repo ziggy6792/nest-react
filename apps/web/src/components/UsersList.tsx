@@ -1,4 +1,4 @@
-import { api } from '../api';
+import api from 'src/api/api';
 import type { UserDetailsDto } from '../api/generated/client.schemas';
 
 export function UsersList() {
